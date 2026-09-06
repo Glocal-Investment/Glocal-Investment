@@ -60,11 +60,12 @@
   }
   .logo .logo-en { font-size: 11px; color: var(--text-muted); font-weight: 700; letter-spacing: 1.5px; }
   
-  .mainnav { display: flex; gap: 8px; flex: 1; }
+  .mainnav { display: flex; gap: 2px; flex: 1; min-width: 0; }
   .navitem {
-    position: relative; padding: 10px 20px; border-radius: var(--radius-full);
+    position: relative; padding: 10px 14px; border-radius: var(--radius-full);
     font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer;
     transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
   }
   .navitem:hover { background: var(--bg-page); color: var(--text-main); }
   .navitem.active { color: var(--primary); background: var(--primary-light); font-weight: 700; }
@@ -1424,7 +1425,8 @@ auth.onAuthStateChanged(user => {
   if(user){
     loginBtn.style.display = 'none';
     logoutBtn.style.display = 'inline-block';
-    logoutBtn.textContent = `⏻ 로그아웃 (${user.email})`;
+    logoutBtn.textContent = '⏻ 로그아웃';
+    logoutBtn.title = user.email;
     loadProfileFromCloud(user.uid);
   } else {
     loginBtn.style.display = 'inline-block';

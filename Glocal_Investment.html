@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>지테크 G-Tech — 전북 청년·외국인 근로자 금융 연계 플랫폼</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root {
+    --primary: #2563EB;
+    --primary-light: #EFF6FF;
+    --primary-dark: #1D4ED8;
+    --accent: #14B8A6;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --bg-page: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+  }
+  
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  button, select, input { font-family: inherit; }
+
+  /* Top navigation */
+  .topnav {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topnav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 0 32px; height: 72px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .logo {
+    font-size: 22px; font-weight: 800; color: var(--primary);
+    letter-spacing: -0.5px; flex-shrink: 0; display: flex; align-items: baseline; gap: 8px; cursor: pointer;
+  }
+  .logo .logo-en { font-size: 11px; color: var(--text-muted); font-weight: 700; letter-spacing: 1.5px; }
+  
+  .mainnav { display: flex; gap: 8px; flex: 1; }
+  .navitem {
+    position: relative; padding: 10px 20px; border-radius: var(--radius-full);
+    font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer;
+    transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
+  }
+  .navitem:hover { background: var(--bg-page); color: var(--text-main); }
+  .navitem.active { color: var(--primary); background: var(--primary-light); font-weight: 700; }
+
+  /* Page shell */
+  .page-main { max-width: 1180px; margin: 0 auto; padding: 40px 32px 80px; width: 100%; }
+  .screen { display: none; opacity: 0; transition: opacity 0.3s ease; }
+  .screen.active { display: block; opacity: 1; }
+  
+  .page-head { margin-bottom: 32px; }
+  .page-head h2 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+  .page-head p { font-size: 15px; color: var(--text-muted); margin: 8px 0 0; max-width: 600px; }
+  
+  .card {
+    background: var(--bg-card); border-radius: var(--radius-lg); padding: 24px;
+    border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  }
+  .restart-link {
+    display: inline-block; font-size: 13px; color: var(--text-muted);
+    margin-top: 20px; cursor: pointer; text-decoration: none; padding: 8px 12px;
+    border-radius: var(--radius-md); background: var(--bg-page); font-weight: 600; transition: background 0.2s;
+  }
+  .restart-link:hover { background: #e2e8f0; color: var(--text-main); }
+
+  .site-footer { border-top: 1px solid var(--border); background: var(--bg-card); margin-top: 20px; }
+  .site-footer-inner { max-width: 1180px; margin: 0 auto; padding: 24px 32px; }
+
+  /* --- Onboarding --- */
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: start; padding-top: 20px; }
+  .hero-eyebrow {
+    font-size: 13px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px;
+    background: var(--primary-light); display: inline-block; padding: 8px 16px; border-radius: var(--radius-full);
+  }
+  .hero-title { font-size: 42px; font-weight: 800; line-height: 1.3; margin: 24px 0 0; letter-spacing: -1px; }
+  .hero-title span { color: var(--primary); }
+  .hero-sub { font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-top: 20px; max-width: 520px; }
+  .hero-features { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .hf { display: flex; gap: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); }
+  .hf .fi { font-size: 24px; line-height: 1; }
+  .hf b { font-size: 15px; display: block; color: var(--text-main); }
+  .hf div div { font-size: 13px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+
+  .hero-panel { position: sticky; top: 100px; box-shadow: var(--shadow-md); border: none; }
+  .htitle { font-size: 22px; font-weight: 800; line-height: 1.4; margin-bottom: 8px; }
+  
+  .step-label { font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+  
+  /* Inputs & Pickers */
+  .field-label { font-size: 13px; color: var(--text-muted); font-weight: 700; margin: 20px 0 8px; }
+  .amount-input {
+    width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 14px 16px; font-size: 15px; font-weight: 600; color: var(--text-main);
+    background: var(--bg-card); transition: all 0.2s; outline: none; appearance: none;
+  }
+  select.amount-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; cursor: pointer;
+  }
+  .amount-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+  
+  .cat-picker { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .cat-chip {
+    border: 1px solid var(--border); background: var(--bg-card); border-radius: var(--radius-full);
+    padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-muted);
+    transition: all 0.2s; user-select: none;
+  }
+  .cat-chip:hover { border-color: #cbd5e1; background: #f1f5f9; }
+  .cat-chip.selected { border-color: var(--primary); color: var(--primary); background: var(--primary-light); font-weight: 700; }
+  
+  .visa-list { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 4px; }
+  .visa-chip {
+    border: 1px solid var(--border); background: var(--bg-card); border-radius: var(--radius-md);
+    padding: 12px 0; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1 1 30%; text-align: center;
+    color: var(--text-muted); transition: all 0.2s;
+  }
+  .visa-chip:hover { border-color: #cbd5e1; }
+  .visa-chip.selected { border-color: var(--primary); color: var(--primary); background: var(--primary-light); box-shadow: inset 0 0 0 1px var(--primary); }
+
+  .btn-primary {
+    margin-top: 28px; width: 100%; background: var(--primary); color: #fff; border: none;
+    padding: 16px; border-radius: var(--radius-md); font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  /* --- Home Dashboard --- */
+  .mobile-home { display: flex; flex-direction: column; gap: 20px; }
+  .app-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 4px; }
+  .app-kicker { font-size: 12px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;}
+  .app-title { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; }
+  .pill-btn {
+    background: var(--primary-light); border: none; color: var(--primary);
+    padding: 10px 16px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s;
+  }
+  .pill-btn:hover { background: #dbeafe; }
+  
+  .jitech-intro-card {
+    background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+    border: 1px solid #BAE6FD; border-radius: var(--radius-xl); padding: 24px;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.05); position: relative; overflow: hidden;
+  }
+  .jitech-intro-card::after {
+    content: "✨"; position: absolute; right: 20px; bottom: 20px; font-size: 60px; opacity: 0.1;
+  }
+  .jitech-intro-card .tag {
+    display: inline-block; font-size: 12px; font-weight: 800; color: #0284C7;
+    background: rgba(255,255,255,0.7); padding: 6px 12px; border-radius: var(--radius-full); margin-bottom: 12px;
+  }
+  .jitech-intro-card h3 { margin: 0; font-size: 18px; font-weight: 800; color: #0369A1; line-height: 1.4; }
+  .jitech-intro-card p { margin: 10px 0 0; font-size: 14px; color: #0C4A6E; line-height: 1.6; max-width: 90%; }
+
+  .summary-card {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    border-radius: var(--radius-xl); padding: 24px; color: #fff; box-shadow: 0 16px 32px rgba(37, 99, 235, 0.25);
+  }
+  .summary-top { display: flex; align-items: center; justify-content: space-between; }
+  .summary-top .eyebrow { font-size: 13px; opacity: 0.8; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .summary-balance { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-top: 12px; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+  .summary-stat { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 14px 16px; backdrop-filter: blur(4px); }
+  .summary-stat .label { font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;}
+  .summary-stat .value { font-size: 18px; font-weight: 800; margin-top: 6px; }
+
+  .quick-score { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .score-box {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer;
+    transition: all 0.2s ease; box-shadow: var(--shadow-sm);
+  }
+  .score-box:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--primary-light); }
+  .score-box .count { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
+  .score-box .meta { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+
+  .section-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 20px; box-shadow: var(--shadow-sm); }
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .section-head h3 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+  .section-head .more { font-size: 13px; font-weight: 700; color: var(--primary); background: var(--primary-light); border-radius: var(--radius-full); padding: 6px 12px; cursor: pointer; transition: background 0.2s;}
+  .section-head .more:hover { background: #dbeafe; }
+
+  .mini-list { display: flex; flex-direction: column; gap: 10px; }
+  .policy-mini { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; transition: background 0.2s; cursor: pointer;}
+  .policy-mini:hover { background: #f1f5f9; }
+  .policy-mini .name { font-size: 14px; font-weight: 700; line-height: 1.4; color: var(--text-main); }
+  
+  .badge { font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: var(--radius-full); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+  .badge.eligible { background: #ECFDF5; color: var(--success); border: 1px solid #A7F3D0; }
+  .badge.conditional { background: #FFFBEB; color: var(--warning); border: 1px solid #FDE68A; }
+  .badge.restricted { background: #FEF2F2; color: var(--danger); border: 1px solid #FECACA; }
+  .badge.info { background: #F1F5F9; color: var(--text-muted); border: 1px solid #E2E8F0; }
+
+  .donut-compact { display: flex; align-items: center; justify-content: space-around; gap: 20px; padding: 10px 0; }
+  .donut-compact .donut { 
+    width: 130px; height: 130px; border-radius: 50%; 
+    position: relative; display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.02);
+  }
+  .donut-hole {
+    width: 90px; height: 90px; background: var(--bg-card); border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); z-index: 2; text-align: center;
+  }
+  .donut-hole .dh-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 2px;}
+  .donut-hole .dh-value { font-size: 14px; font-weight: 800; color: var(--text-main); }
+  .donut-compact .legend { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 120px; }
+
+  /* --- Policy Screen --- */
+  .policy-layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+  .filter-sidebar { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; position: sticky; top: 100px; box-shadow: var(--shadow-sm); }
+  .filter-sidebar .fs-label { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .filter-row { display: flex; flex-direction: column; gap: 6px; }
+  .chip {
+    font-size: 14px; font-weight: 600; padding: 12px 16px; border-radius: var(--radius-md);
+    border: 1px solid transparent; background: transparent; cursor: pointer; color: var(--text-muted);
+    text-align: left; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
+  }
+  .chip:hover { background: var(--bg-page); }
+  .chip.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-main); font-weight: 600; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); cursor: pointer; }
+  .checkbox-row input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+
+  .policy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; align-content: start; }
+  .policy-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s; }
+  .policy-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+  .policy-card .cat { font-size: 13px; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .policy-card .title { font-size: 18px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; color: var(--text-main); }
+  .policy-card .desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin: 12px 0 16px; flex: 1; }
+  .policy-card .benefit { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+  .policy-card .benefit b { color: var(--primary); font-size: 15px; font-weight: 800; display: block; }
+  .policy-card .cta { margin-top: 16px; background: var(--bg-page); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; color: var(--text-main); transition: background 0.2s; }
+  .policy-card .cta:hover { background: #e2e8f0; }
+  .ext-link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 700; color: var(--primary); text-decoration: none; padding: 12px; background: var(--primary-light); border-radius: var(--radius-md); text-align: center; transition: background 0.2s;}
+  .ext-link:hover { background: #dbeafe; }
+
+  /* --- Finance --- */
+  .fin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .fin-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); }
+  .fin-item .t { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  .fin-item .v { font-size: 24px; font-weight: 800; margin-top: 8px; color: var(--text-main); }
+  .fin-item.remain { background: var(--primary-light); border-color: #BFDBFE; }
+  .fin-item.remain .v { color: var(--primary); }
+  
+  .dash-grid { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 24px; }
+  .chart-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
+  .add-expense-btn {
+    border: 1px dashed var(--primary); color: var(--primary); background: transparent;
+    padding: 10px 20px; border-radius: var(--radius-md); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  }
+  .add-expense-btn:hover { background: var(--primary-light); border-style: solid; }
+  
+  .expense-list { margin-top: 16px; }
+  .expense-list .expense-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 8px; border-bottom: 1px solid var(--border); }
+  .expense-list .expense-row:last-child { border-bottom: none; }
+  .expense-row-info { display: flex; flex-direction: column; gap: 4px; }
+  .expense-row-info .l { font-size: 15px; font-weight: 700; color: var(--text-main); }
+  .expense-row-info .c { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .expense-row-amt { font-size: 16px; font-weight: 800; color: var(--text-main); }
+
+  .foreign-box { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: var(--radius-lg); padding: 20px; margin-top: 20px; }
+  .foreign-box .ftitle { font-size: 15px; font-weight: 800; color: #166534; margin-bottom: 12px; }
+
+  /* --- Profile --- */
+  .profile-layout { max-width: 600px; display: flex; flex-direction: column; gap: 24px; margin: 0 auto; }
+  .profile-card { display: flex; align-items: center; gap: 20px; padding: 32px 24px; }
+  .avatar {
+    width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; box-shadow: var(--shadow-md);
+  }
+  .profile-name { font-size: 24px; font-weight: 800; color: var(--text-main); }
+  .profile-sub { font-size: 15px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+  
+  .info-row { display: flex; justify-content: space-between; font-size: 15px; padding: 16px 4px; border-bottom: 1px solid var(--border); }
+  .info-row:last-of-type { border-bottom: none; }
+  .info-row .k { color: var(--text-muted); font-weight: 600; }
+  .info-row span:not(.k) { font-weight: 700; color: var(--text-main); }
+  
+  .btn-outline {
+    background: #fff; border: 1px solid var(--border); padding: 16px; border-radius: var(--radius-md);
+    font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; color: var(--text-main); transition: all 0.2s;
+  }
+  .btn-outline:hover { background: var(--bg-page); border-color: #cbd5e1; }
+  
+  .condition-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; margin-bottom: 24px; }
+  .condition-chip { font-size: 13px; font-weight: 700; background: var(--primary-light); color: var(--primary); padding: 8px 16px; border-radius: var(--radius-full); }
+
+  /* --- Modals / Sheets --- */
+  .sheet-overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+  }
+  .sheet-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+  .sheet {
+    background: #fff; width: 100%; max-width: 480px; border-radius: var(--radius-xl);
+    padding: 32px; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-lg);
+  }
+  .sheet h3 { font-size: 20px; margin: 0 0 16px; font-weight: 800; }
+  .sheet p { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin: 0 0 24px; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .screen.fade-in { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    body { background: #F1F5F9; }
+    .topnav {
+      position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+      background: rgba(255, 255, 255, 0.95); border-top: 1px solid var(--border); border-bottom: none;
+      box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06); padding-bottom: env(safe-area-inset-bottom);
+    }
+    .topnav-inner { max-width: 100%; height: 72px; padding: 0 8px; justify-content: center; }
+    .logo { display: none; }
+    .mainnav { width: 100%; gap: 4px; }
+    .navitem {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; padding: 10px 4px; border-radius: var(--radius-md); font-size: 11px; line-height: 1; background: transparent !important;
+    }
+    .navitem .icon { font-size: 22px; margin-bottom: 2px; filter: grayscale(100%) opacity(0.6); transition: all 0.2s; }
+    .navitem.active { color: var(--primary); }
+    .navitem.active .icon { filter: none; transform: scale(1.1); }
+    
+    .page-main { max-width: 100%; padding: 24px 20px 100px; }
+    .site-footer-inner { padding: 24px 20px 100px; }
+    
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; padding-top: 10px; }
+    .hero-title { font-size: 32px; }
+    .hero-features { grid-template-columns: 1fr; }
+    .hero-panel { position: static; box-shadow: none; padding: 0; background: transparent; border: none; margin-top: 20px; }
+    .hero-panel.card { border: none; background: transparent; padding: 0;}
+    .hero-panel .htitle { font-size: 24px; }
+    
+    .policy-layout { grid-template-columns: 1fr; gap: 20px; }
+    .filter-sidebar { position: static; }
+    .policy-grid { grid-template-columns: 1fr; gap: 16px; }
+    
+    .dash-grid { grid-template-columns: 1fr; gap: 20px; }
+    .fin-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .fin-item { padding: 16px; }
+    .fin-item .v { font-size: 20px; }
+    
+    .summary-card { padding: 20px; }
+    .jitech-intro-card { padding: 20px; }
+  }
+
+  /* --- Chatbot Widget & Modal --- */
+  .chatbot-fab {
+    position: fixed; right: 24px; bottom: 32px; z-index: 90;
+    background: linear-gradient(135deg, var(--primary) 0%, #1D4ED8 100%);
+    color: #fff; border: none; padding: 14px 22px; border-radius: var(--radius-full);
+    font-size: 15px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35); display: flex; align-items: center; gap: 8px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .chatbot-fab:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45); }
+  .chatbot-fab:active { transform: translateY(1px) scale(0.98); }
+  .chatbot-fab .fab-badge { background: #EF4444; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 99px; position: absolute; top: -2px; right: -2px; font-weight: 800; border: 2px solid #fff; }
+
+  .chat-modal {
+    position: fixed; bottom: 24px; right: 24px; z-index: 100;
+    width: 400px; max-width: calc(100vw - 32px); height: 600px; max-height: calc(100vh - 100px);
+    background: #fff; border-radius: var(--radius-xl); box-shadow: 0 20px 40px rgba(15, 23, 42, 0.22);
+    border: 1px solid var(--border); display: none; flex-direction: column; overflow: hidden;
+    animation: chatPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .chat-modal.show { display: flex; }
+  @keyframes chatPopup { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .chat-header {
+    background: linear-gradient(135deg, #1E40AF 0%, var(--primary) 100%);
+    color: #fff; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .chat-header-info { display: flex; flex-direction: column; gap: 2px; }
+  .chat-header-title { font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+  .chat-header-sub { font-size: 12px; opacity: 0.85; font-weight: 500; }
+  .chat-close-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .chat-close-btn:hover { background: rgba(255,255,255,0.3); }
+
+  .chat-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background: #F8FAFC; }
+  
+  .chat-msg { display: flex; flex-direction: column; gap: 6px; max-width: 85%; }
+  .chat-msg.bot { align-self: flex-start; }
+  .chat-msg.user { align-self: flex-end; }
+
+  .chat-bubble {
+    padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.55; word-break: break-word;
+  }
+  .chat-msg.bot .chat-bubble { background: #fff; color: var(--text-main); border: 1px solid var(--border); border-top-left-radius: 4px; box-shadow: var(--shadow-sm); }
+  .chat-msg.user .chat-bubble { background: var(--primary); color: #fff; border-top-right-radius: 4px; font-weight: 600; }
+
+  .chat-quick-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chat-qchip {
+    background: #fff; border: 1px solid var(--primary); color: var(--primary); font-size: 12px; font-weight: 700;
+    padding: 8px 12px; border-radius: var(--radius-full); cursor: pointer; transition: all 0.2s;
+  }
+  .chat-qchip:hover { background: var(--primary-light); }
+
+  .chat-card-item {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm);
+  }
+  .chat-card-item .t { font-size: 14px; font-weight: 800; color: var(--text-main); }
+  .chat-card-item .b { font-size: 12px; color: var(--primary); font-weight: 700; }
+  .chat-card-item .d { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .chat-card-item .a { font-size: 12px; font-weight: 700; color: var(--primary); text-decoration: underline; margin-top: 4px; display: inline-block; }
+
+  .chat-footer { padding: 12px; background: #fff; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+  .chat-input {
+    flex: 1; border: 1px solid var(--border); border-radius: var(--radius-full); padding: 10px 16px; font-size: 14px; outline: none; transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: var(--primary); }
+  .chat-send-btn {
+    background: var(--primary); color: #fff; border: none; width: 38px; height: 38px; border-radius: 50%;
+    font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0;
+  }
+  .chat-send-btn:hover { background: var(--primary-dark); }
+
+  @media (max-width: 768px) {
+    .chatbot-fab { right: 16px; bottom: 84px; padding: 12px 18px; font-size: 14px; }
+    .chat-modal { right: 0; left: 0; bottom: 0; width: 100%; height: 80vh; max-height: 80vh; border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
+  }
+
+
+  .top-reset-btn {
+    background: #F1F5F9;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .top-reset-btn:hover {
+    background: #E2E8F0;
+    color: var(--text-main);
+    border-color: #CBD5E1;
+  }
+
+  @media (max-width: 768px) {
+    .top-reset-btn { display: none; }
+  }
+
+
+  .asset-sync-btn {
+    background: var(--primary-light);
+    border: 1px solid #BFDBFE;
+    color: var(--primary);
+    padding: 10px 18px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+  }
+  .asset-sync-btn:hover {
+    background: #DBEAFE;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .sync-status-box {
+    text-align: center;
+    padding: 28px 0;
+  }
+  .sync-spinner {
+    width: 48px; height: 48px;
+    border: 4px solid var(--primary-light);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  .asset-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .asset-item-row .name { font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+  .asset-item-row .amt { font-weight: 800; color: var(--text-main); }
+
+
+  .lang-picker {
+    display: flex;
+    align-items: center;
+    background: #F1F5F9;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 3px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .lang-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .lang-btn:hover {
+    color: var(--text-main);
+  }
+  .lang-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .lang-picker {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      z-index: 40;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <div class="logo" onclick="switchScreen('home')">지테크 <span class="logo-en">G-TECH</span></div>
+    <nav class="mainnav" id="mainNav">
+      <div class="navitem" data-nav="home"><span class="icon">🏠</span> <span class="txt">홈</span></div>
+      <div class="navitem" data-nav="policy"><span class="icon">🎁</span> <span class="txt">혜택</span></div>
+      <div class="navitem" data-nav="finance"><span class="icon">📊</span> <span class="txt">재무</span></div>
+      <div class="navitem" data-nav="mentor"><span class="icon">🤝</span> <span class="txt">직무 멘토</span></div>
+      <div class="navitem" data-nav="profile"><span class="icon">👤</span> <span class="txt">내 정보</span></div>
+    </nav>
+    <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+      <button class="top-reset-btn" onclick="restartOnboarding()" data-i18n="resetDiagnosis">⟲ 조건 다시 진단받기</button>
+      <div class="lang-picker" id="langPicker">
+        <button class="lang-btn active" onclick="setLanguage('ko')">KR</button>
+        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="setLanguage('zh')">CN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-main">
+
+  <!-- 1. ONBOARDING -->
+  <section class="screen active" id="screen-onboard">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="hero-eyebrow" data-i18n="heroEyebrow">전북 청년·외국인 근로자 맞춤 플랫폼 | G-Tech (Glocal + 財 + Tech)</div>
+        <h1 class="hero-title" data-i18n="heroTitle">지역을 알면,<br/><span>내 돈이 달라진다.</span></h1>
+        <p class="hero-sub" data-i18n="heroSub">지테크(G-Tech)는 특정 금융상품 판매 유도나 대출·투자 권유 등 사적 영업을 제공하지 않는 <b>공익형 서비스</b>입니다. 입력하신 거주지, 연령, 근로 상태를 바탕으로 검증된 정부·지자체 및 민간 공공 기관의 정책·금융 서비스를 가장 알맞게 매칭해 드립니다.</p>
+        <div class="hero-features">
+          <div class="hf"><div class="fi">🎯</div><div><b data-i18n="hf1Title">개인화 매칭 엔진</b><div data-i18n="hf1Desc">조건을 분석하여 참여가능, 제한가능 여부를 즉시 판정합니다.</div></div></div>
+          <div class="hf"><div class="fi">🔗</div><div><b data-i18n="hf2Title">공식 기관 다이렉트</b><div data-i18n="hf2Desc">복잡한 검색 없이 실제 기관 신청 페이지로 바로 안내합니다.</div></div></div>
+          <div class="hf"><div class="fi">🌏</div><div><b data-i18n="hf3Title">외국인 근로자 포용</b><div data-i18n="hf3Desc">체류 자격에 따른 맞춤 혜택과 대안 정책을 함께 제안합니다.</div></div></div>
+          <div class="hf"><div class="fi">🔒</div><div><b data-i18n="hf4Title">안전한 로컬 저장</b><div data-i18n="hf4Desc">개인정보를 서버로 전송하지 않고 브라우저에 안전하게 보관합니다.</div></div></div>
+        </div>
+      </div>
+
+      <div class="hero-panel card">
+        <div class="htitle" id="obTitle" data-i18n="obCheckTitle">내 상황 체크하기</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom: 24px;" data-i18n="obCheckSub">간단한 조건 입력으로 숨은 혜택을 찾아보세요.</div>
+        <button class="btn-primary" id="obStartBtn" onclick="showStep(2)" data-i18n="obStartBtn">지금 바로 시작하기</button>
+
+        <div id="obStep2" style="display:none;width:100%;">
+          <div class="step-label" data-i18n="obStep1">STEP 1 · 기본 정보</div>
+          <div class="field-label" style="margin-top:0;" data-i18n="obResidenceLabel">거주 지역</div>
+          <select class="amount-input" id="obResidence">
+            <option value="전주시">전주시</option>
+            <option value="군산시">군산시</option>
+            <option value="익산시" selected>익산시</option>
+            <option value="정읍시">정읍시</option>
+            <option value="남원시">남원시</option>
+            <option value="김제시">김제시</option>
+            <option value="완주군">완주군</option>
+            <option value="진안군">진안군</option>
+            <option value="무주군">무주군</option>
+            <option value="장수군">장수군</option>
+            <option value="임실군">임실군</option>
+            <option value="순창군">순창군</option>
+            <option value="고창군">고창군</option>
+            <option value="부안군">부안군</option>
+          </select>
+          <div class="field-label" data-i18n="obAgeBandLabel">연령대</div>
+          <div class="cat-picker" id="obAgeBand">
+            <div class="cat-chip" data-val="10s">19세 이하</div>
+            <div class="cat-chip selected" data-val="20s">20대</div>
+            <div class="cat-chip" data-val="30s">30대</div>
+            <div class="cat-chip" data-val="40s">40세 이상</div>
+          </div>
+          <div class="field-label" data-i18n="obEmploymentLabel">근로 상태</div>
+          <div class="cat-picker" id="obEmployment">
+            <div class="cat-chip selected" data-val="employed">재직 중</div>
+            <div class="cat-chip" data-val="freelance">프리랜서·자영업</div>
+          </div>
+          <div id="obCompanyLocalWrap">
+            <div class="field-label" data-i18n="obCompanyLocalLabel">근무 회사 위치 (전북 내 시·군)</div>
+            <select class="amount-input" id="obCompanyLocal">
+              <option value="전주시">전주시</option>
+              <option value="군산시">군산시</option>
+              <option value="익산시" selected>익산시</option>
+              <option value="정읍시">정읍시</option>
+              <option value="남원시">남원시</option>
+              <option value="김제시">김제시</option>
+              <option value="완주군">완주군</option>
+              <option value="진안군">진안군</option>
+              <option value="무주군">무주군</option>
+              <option value="장수군">장수군</option>
+              <option value="임실군">임실군</option>
+              <option value="순창군">순창군</option>
+              <option value="고창군">고창군</option>
+              <option value="부안군">부안군</option>
+            </select>
+          </div>
+          <button class="btn-primary" onclick="goToStep(3)" data-i18n="obNextBtn">다음으로</button>
+        </div>
+
+        <div id="obStep3" style="display:none;width:100%;">
+          <div class="step-label" data-i18n="obStep2">STEP 2 · 재무 상태</div>
+          <div class="field-label" style="margin-top:0;" data-i18n="obIncomeBandLabel">월 평균 소득</div>
+          <div class="cat-picker" id="obIncomeBand">
+            <div class="cat-chip" data-val="under200">200만원 미만</div>
+            <div class="cat-chip selected" data-val="200to300">200~300만원</div>
+            <div class="cat-chip" data-val="300to400">300~400만원</div>
+            <div class="cat-chip" data-val="over400">400만원 이상</div>
+          </div>
+          <div class="field-label" data-i18n="obAssetBandLabel">보유 자산 규모 (예적금 등)</div>
+          <div class="cat-picker" id="obAssetBand">
+            <div class="cat-chip selected" data-val="none">거의 없음</div>
+            <div class="cat-chip" data-val="under1000">1,000만원 미만</div>
+            <div class="cat-chip" data-val="1000to3000">1,000~3,000만원</div>
+            <div class="cat-chip" data-val="over3000">3,000만원 이상</div>
+          </div>
+          <div class="field-label" data-i18n="obDebtLabel">현재 상환 중인 대출·부채 (학자금 등)</div>
+          <div class="cat-picker" id="obDebt">
+            <div class="cat-chip" data-val="yes">있음</div>
+            <div class="cat-chip selected" data-val="no">없음</div>
+          </div>
+          <button class="btn-primary" onclick="goToStep(4)" data-i18n="obNextBtn">다음으로</button>
+        </div>
+
+        <div id="obStep4" style="display:none;width:100%;">
+          <div class="step-label" data-i18n="obStep3">STEP 3 · 국적 및 기타</div>
+          <div class="field-label" style="margin-top:0;" data-i18n="obNationalityLabel">국적</div>
+          <div class="cat-picker" id="obNationality">
+            <div class="cat-chip selected" data-val="korean">대한민국 국적</div>
+            <div class="cat-chip" data-val="foreigner">외국 국적</div>
+          </div>
+          <div id="obVisaWrap" style="display:none;">
+            <div class="field-label" data-i18n="obVisaLabel">체류자격 (비자)</div>
+            <div class="visa-list" id="obVisaList">
+              <div class="visa-chip" onclick="selectVisa(this)">E-9</div>
+              <div class="visa-chip" onclick="selectVisa(this)">E-7</div>
+              <div class="visa-chip" onclick="selectVisa(this)">F-2</div>
+              <div class="visa-chip" onclick="selectVisa(this)">F-6</div>
+              <div class="visa-chip" onclick="selectVisa(this)" style="flex-basis:100%;">잘 모르겠어요</div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="finishOnboarding()" data-i18n="obResultBtn">내 맞춤 결과 확인하기</button>
+        </div>
+
+        <div id="obStep5" style="display:none;width:100%;text-align:center;padding: 20px 0;">
+          <div style="font-size:48px; margin-bottom: 16px;">🎉</div>
+          <div style="font-size:22px;font-weight:800;margin-top:10px; color: var(--text-main);" id="obResultTitle" data-i18n="obResultTitle">진단이 완료되었습니다</div>
+          <div style="font-size:14px;color:var(--text-muted);margin-top:8px; margin-bottom: 24px;" id="obResultSub"></div>
+          <div class="match-summary" id="obMatchSummary" style="text-align: left; background: var(--bg-page); padding: 20px; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 12px; font-weight: 600; border: 1px solid var(--border);"></div>
+          <button class="btn-primary" onclick="goHome()" data-i18n="obHomeBtn">지테크 홈으로 이동</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. HOME -->
+  <section class="screen" id="screen-home">
+    <div class="mobile-home">
+      <div class="app-header">
+        <div>
+          <div class="app-kicker">지테크 G-Tech</div>
+          <div class="app-title" id="homeGreeting">안녕하세요, 나은님</div>
+        </div>
+        <button class="pill-btn" onclick="switchScreen('policy')" data-i18n="homeAllPolicyBtn">전체 혜택 보기</button>
+      </div>
+
+      <!-- 지테크 서비스 설명 카드 -->
+      <div class="jitech-intro-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <span class="tag" style="margin-bottom:0;" data-i18n="homeGuideTag">💡 지테크(G-Tech) 가이드</span>
+          <div style="font-size:12px; font-weight:800; color:#0369A1; background:rgba(255,255,255,0.9); padding:5px 12px; border-radius:var(--radius-full); border:1px solid #BAE6FD;">
+            <b>지테크</b>: 지역기반 재테크 &nbsp;|&nbsp; <b>G-Tech</b>: Glocal + 財 + Tech
+          </div>
+        </div>
+        <h3 data-i18n="homeGuideTitle">지역기반 재테크, 우리가 놓쳤던 지자체 알짜 혜택들</h3>
+        <p data-i18n="homeGuideDesc">도내 중소·중견기업에 다니는 청년들을 위한 숨겨진 돈 찾기! 전북 14개 시·군의 청년 정책, 자산형성 지원금, 단기 일자리까지. 입력하신 조건에 맞는 최적의 재테크 기회를 정리해 드립니다.</p>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-top">
+          <div class="eyebrow" data-i18n="homeAssetLabel">현재 예상 자산 잔액</div>
+          <span class="pill-btn" style="background:rgba(255,255,255,0.15); color:#fff; font-size: 11px;" data-i18n="homeMonthLabel">이번 달 기준</span>
+        </div>
+        <div class="summary-balance" id="homeAssetValue">₩0</div>
+        <div class="summary-grid">
+          <div class="summary-stat">
+            <div class="label" data-i18n="homeIncomeLabel">월 수입</div>
+            <div class="value" id="homeIncome">₩0</div>
+          </div>
+          <div class="summary-stat">
+            <div class="label" data-i18n="homeSpendingLabel">월 지출</div>
+            <div class="value" id="homeSpending">₩0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-score">
+        <div class="score-box" onclick="switchScreen('policy')">
+          <div class="count" id="homeEligibleCount">0</div>
+          <div class="meta" data-i18n="homeEligibleScore">바로 참여 가능한 혜택 🟢</div>
+        </div>
+        <div class="score-box" onclick="switchScreen('policy')">
+          <div class="count" id="homeConditionalCount">0</div>
+          <div class="meta" data-i18n="homeConditionalScore">조건 확인 필요 혜택 🟡</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <h3 data-i18n="homePolicyTitle">나에게 꼭 맞는 정책</h3>
+          <span class="more" onclick="switchScreen('policy')" data-i18n="homeMoreBtn">더보기</span>
+        </div>
+        <div class="mini-list" id="homePolicyList"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <h3 data-i18n="homeSpendingTitle">이번 달 지출 요약</h3>
+          <span class="more" onclick="switchScreen('finance')" data-i18n="homeMoreBtn">상세보기</span>
+        </div>
+        <div class="donut-compact">
+          <div class="donut" id="donutChart">
+            <div class="donut-hole">
+              <div class="dh-label" data-i18n="donutTotalLabel">총 지출</div>
+              <div class="dh-value" id="donutTotal">₩0</div>
+            </div>
+          </div>
+          <div class="legend" id="chartLegend"></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <h3 data-i18n="homeProductTitle">참고할 만한 금융 상품</h3>
+          <span class="more" onclick="openSavingCompareModal()" data-i18n="homeCompareBtn">📊 도약계좌 vs 미래적금 비교</span>
+        </div>
+        <div class="mini-list" id="homeProductList"></div>
+        <button class="btn-outline" style="margin-top:12px; font-size:13px; padding:12px; border-color:#BFDBFE; color:var(--primary); background:var(--primary-light);" onclick="openSavingCompareModal()" data-i18n="homeCompareDiagBtn">
+          💡 청년도약계좌 vs 청년미래적금, 나에게 맞는 계좌는? (1:1 진단)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. POLICY -->
+  <section class="screen" id="screen-policy">
+    <div class="page-head">
+      <h2 data-i18n="policyHeadTitle">맞춤 혜택 라운지</h2>
+      <p data-i18n="policyHeadSub">지역 및 조건에 맞는 정책과 기관 서비스를 찾아 공식 신청 페이지로 안전하게 연결합니다.</p>
+    </div>
+    <div class="policy-layout">
+      <aside class="filter-sidebar">
+        <div class="fs-label" data-i18n="policyResidenceFilter">거주 지역 기준</div>
+        <select class="amount-input" id="policyResidenceSelect" style="margin-bottom:24px;">
+          <option value="전주시">전주시</option>
+          <option value="군산시">군산시</option>
+          <option value="익산시">익산시</option>
+          <option value="정읍시">정읍시</option>
+          <option value="남원시">남원시</option>
+          <option value="김제시">김제시</option>
+          <option value="완주군">완주군</option>
+          <option value="진안군">진안군</option>
+          <option value="무주군">무주군</option>
+          <option value="장수군">장수군</option>
+          <option value="임실군">임실군</option>
+          <option value="순창군">순창군</option>
+          <option value="고창군">고창군</option>
+          <option value="부안군">부안군</option>
+        </select>
+        <div class="fs-label" data-i18n="policyCatFilter">카테고리 필터</div>
+        <div class="filter-row" id="filterRow">
+          <div class="chip active" data-cat="all" data-i18n="catAll">🗂 전체 보기</div>
+          <div class="chip" data-cat="finance" data-i18n="catFin">💰 금융 지원</div>
+          <div class="chip" data-cat="housing" data-i18n="catHouse">🏛 주거·독립</div>
+          <div class="chip" data-cat="living" data-i18n="catLive">🌿 생활·복지</div>
+        </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="onlyEligibleCheck"/> <span data-i18n="policyOnlyEligible">내가 참여 가능한 것만</span>
+        </label>
+      </aside>
+
+      <div class="policy-grid" id="policyList"></div>
+    </div>
+
+    <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheetBg(event)">
+      <div class="sheet">
+        <h3 data-i18n="sheetTitle">조건 안내</h3>
+        <p id="sheetReasonText"></p>
+        <button class="btn-primary" onclick="closeSheet()" data-i18n="sheetConfirmBtn">내용을 확인했습니다</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FINANCE -->
+  <section class="screen" id="screen-finance">
+    <div class="page-head" style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+      <div>
+        <h2 data-i18n="finHeadTitle">나의 재무 현황</h2>
+        <p data-i18n="finHeadSub">이번 달 현금 흐름을 한눈에 파악하고, 필요한 공공 상담 서비스와 연계해보세요.</p>
+      </div>
+      <button class="asset-sync-btn" onclick="openAssetSyncModal()" data-i18n="financeSyncBtn">
+        <span>🔗</span> 자산 연동하기
+      </button>
+    </div>
+    <div class="fin-grid">
+      <div class="fin-item"><div class="t" data-i18n="finIncomeLabel">총 수입</div><div class="v" id="finIncome">₩0</div></div>
+      <div class="fin-item"><div class="t" data-i18n="finFixedLabel">고정 지출 (주거비 등)</div><div class="v" id="finFixed">₩0</div></div>
+      <div class="fin-item"><div class="t" data-i18n="finVarLabel">변동 지출 (생활비)</div><div class="v" id="finVariable">₩0</div></div>
+      <div class="fin-item remain"><div class="t" data-i18n="finRemainLabel">여유 자금</div><div class="v" id="finRemain">₩0</div></div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="dash-main">
+        <div class="card">
+          <div class="card-head-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <div class="chart-title" style="margin:0;" data-i18n="finRecentExpTitle">최근 지출 내역</div>
+            <button class="add-expense-btn" onclick="refreshExpenses()" data-i18n="financeRefreshBtn">⟲ 연동 지출 갱신</button>
+          </div>
+          <div class="expense-list" id="expenseList"></div>
+        </div>
+      </div>
+
+      <aside class="dash-side">
+        <div class="card" style="background: #F8FAFC; border-color: #CBD5E1;">
+          <div class="chart-title" style="font-size: 15px; margin-bottom:10px; display:flex; align-items:center; gap:6px;" data-i18n="finCreditCardTitle">💳 부채 및 신용관리 무료 지원</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6;margin-bottom:16px;" data-i18n="finCreditCardDesc">학자금 대출이나 채무 부담을 안고 계신가요? 지자체와 공공기관에서 제공하는 안전하고 무료인 1:1 재무 상담을 받아보세요.</div>
+          <div id="referralList"></div>
+        </div>
+
+        <div class="foreign-box" id="foreignFinanceBox" style="display:none;">
+          <div class="ftitle" data-i18n="foreignRemitTitle">💱 외국인 근로자 해외송금 계산기</div>
+          <div class="field-label" style="margin-top:4px;" data-i18n="foreignRemitAmountLabel">이번 달 송금 예정액</div>
+          <input class="amount-input" id="remitAmount" type="number" value="1000000" step="10000" oninput="updateRemitCalc()"/>
+          <div class="remit-mini" style="margin-top:16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #fff; padding: 16px; border-radius: var(--radius-md);">
+            <div>
+              <div class="t" style="font-size: 11px; color: var(--text-muted);" data-i18n="remitCurrentFeeLabel">일반 수수료 예시</div>
+              <div class="v" style="color:var(--text-main);font-size:15px; font-weight: 700;" id="remitCurrentFee">₩0</div>
+            </div>
+            <div>
+              <div class="t" style="font-size: 11px; color: var(--text-muted);" data-i18n="remitDiscountFeeLabel">핀테크 우대 적용 시</div>
+              <div class="v" style="color:var(--primary);font-size:15px; font-weight: 700;" id="remitDiscountFee">₩0</div>
+            </div>
+            <div style="grid-column: 1 / 3; border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 4px;">
+              <div class="t" style="font-size: 12px; font-weight: 700; color: #166534;" data-i18n="remitSavingsLabel">예상 절감액</div>
+              <div class="v" id="remitSavings" style="font-size: 18px; font-weight: 800; color: #15803D;">₩0</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+
+  
+  <!-- 4.5 MENTOR -->
+  <section class="screen" id="screen-mentor">
+    <div class="page-head">
+      <h2 data-i18n="mentorHeadTitle">직무 기반 멘토링 라운지</h2>
+      <p data-i18n="mentorHeadSub">대기업 타이틀이 아닌 진짜 실무 역량! 도내 중소·중견기업 재직자의 경험을 나누고 시간당 30,000원의 부수입을 얻으세요.</p>
+    </div>
+
+    <!-- Intro Card -->
+    <div class="card" style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 1px solid #86EFAC; margin-bottom: 24px;">
+      <div style="font-size: 13px; font-weight: 800; color: #166534; margin-bottom: 6px;" data-i18n="mentorGuideTag">💡 지테크 직무 멘토링이란?</div>
+      <div style="font-size: 18px; font-weight: 800; color: #14532D; margin-bottom: 10px;" data-i18n="mentorGuideTitle">스펙 중심 멘토링에서 '진짜 직무 노하우' 중심으로</div>
+      <div style="font-size: 14px; color: #166534; line-height: 1.6;" data-i18n="mentorGuideDesc">
+        전북 권내 중소·중견기업 재직 청년들의 실무 역량은 지역 취준생들에게 가장 현실적이고 유용한 자산입니다.<br/>
+        지자체 청년센터(익산 청년시청 청년샘스쿨 등)와 연계하여 <b>시간당 30,000원(최대 6시간)의 강사료/자문비</b>를 지급받으며 부수입을 올릴 수 있습니다.
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="dash-main">
+        <div class="card">
+          <div style="display:flex; justify-space-between; align-items:center; margin-bottom: 16px;">
+            <div class="chart-title" style="margin:0;" data-i18n="mentorRecruitTitle">현재 모집 중인 직무 멘토링 영역</div>
+            <span class="badge eligible" data-i18n="mentorStipendBadge">🟢 지자체 강사료 지원</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+            <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 16px; font-weight: 800; color: var(--text-main);" data-i18n="mCard1Title">💻 IT·개발 / 데이터</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" data-i18n="mCard1Desc">도내 제조업/IT기업 실무 기획 및 개발 프로젝트 노하우 공유</div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-top: 10px;" data-i18n="mCard1Stipend">지원금: 시간당 30,000원</div>
+            </div>
+            <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 16px; font-weight: 800; color: var(--text-main);" data-i18n="mCard2Title">⚙️ 생산·품질·바이오</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" data-i18n="mCard2Desc">익산/군산 산단 기업 공정 관리 및 품질 인증 실무 가이드</div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-top: 10px;" data-i18n="mCard1Stipend">지원금: 시간당 30,000원</div>
+            </div>
+            <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 16px; font-weight: 800; color: var(--text-main);" data-i18n="mCard3Title">📈 마케팅·경영지원</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" data-i18n="mCard3Desc">지역 기반 유통, B2B 영업, 회무 및 인사실무 팁 공유</div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-top: 10px;" data-i18n="mCard1Stipend">지원금: 시간당 30,000원</div>
+            </div>
+            <div style="background: var(--bg-page); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 16px; font-weight: 800; color: var(--text-main);" data-i18n="mCard4Title">🎨 디자인·콘텐츠</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" data-i18n="mCard4Desc">실무 툴 활용 및 외주/자사 브랜드 디자인 프로세스 축적 노하우</div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-top: 10px;" data-i18n="mCard1Stipend">지원금: 시간당 30,000원</div>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="openMentorApplyModal()" data-i18n="mentorApplyBtn">🤝 직무 멘토 등록 신청하기 (부수입 신청)</button>
+        </div>
+      </div>
+
+      <aside class="dash-side">
+        <div class="card">
+          <div class="chart-title" style="font-size: 15px; margin-bottom: 12px;" data-i18n="mentorSideTitle">🏛 연계 지자체 지원 프로그램</div>
+          <div style="border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; background: #fff; margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size: 11px; color: var(--primary); font-weight: 700;" data-i18n="mSideOrg">익산 청년시청</span>
+              <span style="font-size: 11px; color: var(--danger); font-weight: 800;" data-i18n="mSideLimit">(익산 거주자 한함)</span>
+            </div>
+            <div style="font-size: 14px; font-weight: 800; margin: 4px 0 6px;" data-i18n="mSideProgramTitle">익산 청년샘스쿨 강사 매칭</div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;" data-i18n="mSideProgramDesc">재직 청년의 실무 지식을 강의/자문 형태로 제공 시 시간당 3만 원(최대 6시간) 수당 지급</div>
+            <a href="https://youthforest.iksan.go.kr/board/view.iksan?boardId=BBS_0000015&menuCd=DOM_000000105002001000&paging=ok&startPage=1&searchType=DATA_ti&searchOperation=AND&keyword=%EB%A9%B4%EC%A0%91%EC%A0%95%EC%9E%A5&dataSid=44826" target="_blank" style="display:inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--primary);">공식 공고 보기 →</a>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6;" data-i18n="mSideNote">
+            * 지테크 플랫폼에 등록된 멘토 정보는 전북 14개 시·군 청년센터의 강사 인력풀로 연계되며, 멘토링 지원 사업이 있는 타 지자체의 경우 순차적으로 연동 및 확장될 예정입니다.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Mentor Apply Modal -->
+  <div class="sheet-overlay" id="mentorApplyModal" onclick="closeSheetBgId(event,'mentorApplyModal')">
+    <div class="sheet">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+        <h3 style="margin:0;">🤝 직무 멘토 신청하기</h3>
+        <button onclick="document.getElementById('mentorApplyModal').classList.remove('show')" style="background:none; border:none; font-size:18px; cursor:pointer; color:var(--text-muted); font-weight:700;">✕</button>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">입력하신 직무 정보는 도내 청년센터 멘토링 프로그램 지원금 매칭에 활용됩니다.</p>
+      
+      <div class="field-label" style="margin-top:0;">담당 직무 분야</div>
+      <select class="amount-input" id="mentorJobCategory">
+        <option value="IT/개발">IT·프로그래밍·데이터</option>
+        <option value="생산/품질">생산·품질·바이오·제조</option>
+        <option value="마케팅/영업">마케팅·영업·B2B</option>
+        <option value="경영/인사">경영지원·인사·재무</option>
+        <option value="디자인">디자인·영상·콘텐츠</option>
+      </select>
+
+      <div class="field-label">현재 재직 회사 및 경력 연차</div>
+      <input class="amount-input" id="mentorCompanyInfo" type="text" placeholder="예: 전북 소재 기업 재직 3년 차" />
+
+      <div class="field-label">멘토링 주제 (주요 지식 나눔 내용)</div>
+      <input class="amount-input" id="mentorTopic" type="text" placeholder="예: 중소기업 실무 툴 활용법 및 현실적인 이직 준비" />
+
+      <button class="btn-primary" style="margin-top:24px;" onclick="submitMentorApply()">신청 완료 (시간당 3만원 지원금 연계)</button>
+      <button class="btn-outline" style="margin-top:10px; font-size:14px; padding:12px;" onclick="document.getElementById('mentorApplyModal').classList.remove('show')" data-i18n="closeWin">창 닫기</button>
+    </div>
+  </div>
+
+  <!-- 5. PROFILE -->
+  <section class="screen" id="screen-profile">
+    <div class="page-head"><h2 data-i18n="profileHeadTitle">내 정보 설정</h2><p data-i18n="profileHeadSub">입력하신 프로필 정보를 바탕으로 맞춤 혜택을 찾아드립니다.</p></div>
+    <div class="profile-layout">
+      <div class="card profile-card">
+        <div class="avatar" id="avatarInitial">나</div>
+        <div>
+          <div class="profile-name" id="profileName">김나은</div>
+          <div class="profile-sub" id="profileSub">27세 · 전주시 · 재직</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;font-weight:800;font-size:16px;" data-i18n="profileCondTitle">매칭 기본 조건</div>
+        <div class="condition-chips" id="conditionChips"></div>
+        <div style="margin-top:16px;">
+          <div class="info-row"><span class="k" data-i18n="profileKResidence">거주지</span><span id="infoResidence">전주시</span></div>
+          <div class="info-row"><span class="k" data-i18n="profileKEmp">근로 상태</span><span id="infoEmployment">재직</span></div>
+          <div class="info-row" id="companyLocalRow"><span class="k" data-i18n="profileKComp">소속 기업 소재</span><span id="infoCompanyLocal">-</span></div>
+          <div class="info-row"><span class="k" data-i18n="profileKIncome">월 평균 소득</span><span id="infoIncome">-</span></div>
+          <div class="info-row"><span class="k" data-i18n="profileKAsset">보유 자산</span><span id="infoAsset">-</span></div>
+          <div class="info-row"><span class="k" data-i18n="profileKNat">국적</span><span id="infoNationality">대한민국</span></div>
+          <div class="info-row" id="visaRow" style="display:none;"><span class="k" data-i18n="profileKVisa">체류자격(비자)</span><span id="visaValue">E-9</span></div>
+        </div>
+        <button class="btn-outline" style="margin-top:24px;" onclick="openProfileEditModal()" data-i18n="profileEditBtn">정보 수정하기</button>
+        <div style="text-align: center;">
+          <a class="restart-link" onclick="restartOnboarding()">⟲ 초기화 후 다시 진단받기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile Edit Modal -->
+  <div class="sheet-overlay" id="profileEditModal" onclick="closeSheetBgId(event,'profileEditModal')">
+    <div class="sheet" style="max-height: 90vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+        <h3 style="margin:0;" data-i18n="pEditTitle">정보 수정</h3>
+        <button onclick="document.getElementById('profileEditModal').classList.remove('show')" style="background:none; border:none; font-size:18px; cursor:pointer; color:var(--text-muted); font-weight:700;">✕</button>
+      </div>
+      <div class="field-label">거주 지역</div>
+      <select class="amount-input" id="editResidence">
+        <option value="전주시">전주시</option>
+        <option value="군산시">군산시</option>
+        <option value="익산시">익산시</option>
+        <option value="정읍시">정읍시</option>
+        <option value="남원시">남원시</option>
+        <option value="김제시">김제시</option>
+        <option value="완주군">완주군</option>
+        <option value="진안군">진안군</option>
+        <option value="무주군">무주군</option>
+        <option value="장수군">장수군</option>
+        <option value="임실군">임실군</option>
+        <option value="순창군">순창군</option>
+        <option value="고창군">고창군</option>
+        <option value="부안군">부안군</option>
+      </select>
+      <div class="field-label" data-i18n="obAgeBandLabel">연령대</div>
+      <div class="cat-picker" id="editAgeBand">
+        <div class="cat-chip" data-val="10s">19세 이하</div>
+        <div class="cat-chip" data-val="20s">20대</div>
+        <div class="cat-chip" data-val="30s">30대</div>
+        <div class="cat-chip" data-val="40s">40세 이상</div>
+      </div>
+      <div class="field-label" data-i18n="obEmploymentLabel">근로 상태</div>
+      <div class="cat-picker" id="editEmployment">
+        <div class="cat-chip" data-val="employed">재직 중</div>
+        <div class="cat-chip" data-val="freelance">프리랜서·자영업</div>
+      </div>
+      <div class="field-label">월 평균 소득</div>
+      <div class="cat-picker" id="editIncomeBand">
+        <div class="cat-chip" data-val="under200">200만원 미만</div>
+        <div class="cat-chip" data-val="200to300">200~300만원</div>
+        <div class="cat-chip" data-val="300to400">300~400만원</div>
+        <div class="cat-chip" data-val="over400">400만원 이상</div>
+      </div>
+      <button class="btn-primary" style="margin-top:28px;" onclick="saveProfileEdit()" data-i18n="pEditSaveBtn">변경 내용 저장</button>
+      <button class="btn-outline" style="margin-top:10px; font-size:14px; padding:12px;" onclick="document.getElementById('profileEditModal').classList.remove('show')" data-i18n="closeWin">창 닫기</button>
+    </div>
+  </div>
+
+
+
+  
+  <!-- Savings Comparison Modal -->
+  <div class="sheet-overlay" id="savingCompareModal" onclick="closeSheetBgId(event,'savingCompareModal')">
+    <div class="sheet" style="max-width: 560px; max-height: 90vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+        <h3 style="margin:0; font-size: 19px;" data-i18n="compareModalTitle">📊 청년 정책 적금 1:1 맞춤 비교</h3>
+        <span style="font-size:12px; font-weight:700; color:var(--primary); background:var(--primary-light); padding:4px 10px; border-radius:var(--radius-full);" data-i18n="compareAiTag">AI 맞춤 진단</span>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;" data-i18n="compareModalSub">사회초년생이 가장 많이 헷갈려하는 두 핵심 적금 상품을 완벽 분석해 드립니다.</p>
+
+      <!-- Personalized Recommendation Box -->
+      <div id="compareRecommendBox" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 1.5px solid #93C5FD; padding: 18px; border-radius: var(--radius-lg); margin-bottom: 20px;">
+        <div style="font-size:12px; font-weight:800; color:#1E40AF; margin-bottom:4px;" data-i18n="compareRecTag">🎯 나은님 맞춤 추천 결론</div>
+        <div style="font-size:16px; font-weight:800; color:#1E3A8A; margin-bottom:6px;" id="recTitle">청년미래적금을 우선 추천합니다!</div>
+        <div style="font-size:13px; color:#1E3A8A; line-height:1.55;" id="recReason">
+          현재 월 소득 구간(200~300만 원)과 초기 자산 형성 단계를 고려할 때, 5년 장기 납입이 부담될 경우 <b>3년 만기의 청년미래적금</b>이 중도해지 위험 없이 안정적인 목돈을 만들기에 유리합니다.
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div style="overflow-x: auto; margin-bottom: 20px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: center;">
+          <thead>
+            <tr style="background: #F1F5F9; border-bottom: 2px solid var(--border);">
+              <th style="padding: 10px; text-align: left;">비교 항목</th>
+              <th style="padding: 10px; color: var(--primary); font-weight: 800;">청년미래적금</th>
+              <th style="padding: 10px; color: #0284C7; font-weight: 800;">청년도약계좌</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 10px; font-weight: 700; text-align: left; background: #F8FAFC;">만기 기간</td>
+              <td style="padding: 10px; font-weight: 800; color: var(--primary);">3년 (단·중기)</td>
+              <td style="padding: 10px; font-weight: 700;">5년 (장기)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 10px; font-weight: 700; text-align: left; background: #F8FAFC;">월 적립 한도</td>
+              <td style="padding: 10px;">최대 50만 원</td>
+              <td style="padding: 10px;">최대 70만 원</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 10px; font-weight: 700; text-align: left; background: #F8FAFC;">핵심 혜택</td>
+              <td style="padding: 10px;">정부 우대금리 + 높은 완성률</td>
+              <td style="padding: 10px;">정부 기여금(최대 6%) + 비과세</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 10px; font-weight: 700; text-align: left; background: #F8FAFC;">목돈 목표금액</td>
+              <td style="padding: 10px;">약 1,800만 원 + 이자</td>
+              <td style="padding: 10px; font-weight: 800; color: #0284C7;">최대 5,000만 원 형성</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; font-weight: 700; text-align: left; background: #F8FAFC;">추천 대상</td>
+              <td style="padding: 10px; text-align: left; font-size:12px;">• 5년 유지가 부담스러운 사회초년생<br/>• 3년 내 결혼/이주 계획이 있는 경우</td>
+              <td style="padding: 10px; text-align: left; font-size:12px;">• 5년 이상 장기 근속 예정 청년<br/>• 최대 정부 지원금을 노리는 경우</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn-primary" style="margin-top:0;" onclick="closeSheetBgId({target:{id:'savingCompareModal'}},'savingCompareModal')" data-i18n="compareConfirmBtn">확인했습니다</button>
+    </div>
+  </div>
+
+  <!-- Asset Sync Simulation Modal -->
+  <div class="sheet-overlay" id="assetSyncModal" onclick="closeSheetBgId(event,'assetSyncModal')">
+    <div class="sheet">
+      <h3 data-i18n="syncModalTitle">⚡ 실시간 자산 연동 (시뮬레이션)</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;" data-i18n="syncModalSub">마이데이터 연계를 통해 내 예금, 증권, 페이 자산을 안전하게 조회합니다.</p>
+      
+      <div id="syncLoadingView" class="sync-status-box">
+        <div class="sync-spinner"></div>
+        <div style="font-size: 16px; font-weight: 800; color: var(--text-main);" data-i18n="syncLoadingText">실시간 자산 연동 중...</div>
+        <div style="font-size: 13px; color: var(--text-muted); margin-top: 8px;" data-i18n="syncLoadingSub">전북은행, KB증권, 네이버페이, 쿠팡페이망 연결 중</div>
+      </div>
+
+      <div id="syncResultView" style="display:none;">
+        <div style="background: var(--primary-light); border: 1px solid #BFDBFE; padding: 18px; border-radius: var(--radius-lg); margin-bottom: 16px; text-align: center;">
+          <div style="font-size: 12px; color: var(--primary); font-weight: 700; text-transform: uppercase;" data-i18n="syncTotalLabel">연동된 자산 총합</div>
+          <div style="font-size: 28px; font-weight: 800; color: var(--primary); margin-top: 4px;" id="syncTotalAmt">₩3,722,000</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px;">
+          <div class="asset-item-row">
+            <span class="name" data-i18n="syncBank1">🏦 전북은행 예금</span>
+            <span class="amt">₩3,200,000</span>
+          </div>
+          <div class="asset-item-row">
+            <span class="name" data-i18n="syncSec1">📈 KB 증권</span>
+            <span class="amt">₩500,000</span>
+          </div>
+          <div class="asset-item-row">
+            <span class="name" data-i18n="syncPay1">💚 네이버 페이</span>
+            <span class="amt">₩20,000</span>
+          </div>
+          <div class="asset-item-row">
+            <span class="name" data-i18n="syncPay2">🔴 쿠팡 페이</span>
+            <span class="amt">₩2,000</span>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="margin-top:0;" onclick="completeAssetSync()" data-i18n="syncConfirmBtn">확인 (내 자산에 반영 완료)</button>
+      </div>
+    </div>
+  </div>
+
+<!-- Floating Action Button for Chatbot -->
+<button class="chatbot-fab" onclick="toggleChatbot()">
+  <span>💬</span> 지테크(G-Tech) AI 챗봇
+</button>
+
+<!-- Chatbot Modal/Sheet -->
+<div class="chat-modal" id="chatModal">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-header-title">🤖 지테크 맞춤 추천 AI</div>
+      <div class="chat-header-sub" id="chatUserContext">사용자 조건 기반 1:1 맞춤 안내</div>
+    </div>
+    <button class="chat-close-btn" onclick="toggleChatbot()">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <!-- Messages inserted via JS -->
+  </div>
+  <div class="chat-footer">
+    <input type="text" class="chat-input" id="chatInput" placeholder="궁금한 정책이나 단어를 입력해보세요 (예: 익산, 두배적금, 부수입...)" onkeypress="handleChatKey(event)"/>
+    <button class="chat-send-btn" onclick="sendChatMessage()">➔</button>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer-inner" style="font-size: 13px; color: var(--text-muted); text-align: center;">
+    <span data-i18n="footerText">지테크(G-Tech)는 전북 청년 및 외국인 근로자를 위한 맞춤형 정책·재테크 연계 데모 플랫폼입니다.</span>
+  </div>
+</footer>
+
+<script>
+// UI/UX 개선을 위해 기존 JS 로직은 최대한 유지하면서 스타일링 클래스 토글 등을 부드럽게 조정했습니다.
+
+function switchScreen(name){
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(s => s.classList.remove('active', 'fade-in'));
+  
+  const target = document.getElementById('screen-'+name);
+  if(target){
+      target.classList.add('active');
+      // Reflow for animation
+      void target.offsetWidth; 
+      target.classList.add('fade-in');
+  }
+  
+  document.querySelectorAll('.navitem').forEach(b => b.classList.toggle('active', b.dataset.nav===name));
+  document.getElementById('mainNav').style.display = name==='onboard' ? 'none' : 'flex';
+  
+  window.scrollTo(0,0);
+
+  if(name==='home'){ renderHomePolicyMini(); renderFinance(); }
+  if(name==='policy'){ renderPolicyScreen(); }
+  if(name==='finance'){ renderFinance(); updateRemitCalc(); }
+  if(name==='profile'){ applyProfileUI(); }
+  if(name==='mentor'){ window.scrollTo(0,0); }
+}
+
+document.querySelectorAll('.navitem').forEach(btn=>{
+  btn.addEventListener('click', ()=>switchScreen(btn.dataset.nav));
+});
+
+function showStep(n){
+  document.getElementById('obStartBtn').style.display='none';
+  const introSub = document.getElementById('obTitle').nextElementSibling;
+  if(introSub) introSub.style.display='none';
+  goToStep(n);
+}
+
+function goToStep(n){
+  ['obStep2','obStep3','obStep4','obStep5'].forEach((id,idx)=>{
+    document.getElementById(id).style.display = (idx+2===n) ? 'block' : 'none';
+  });
+}
+
+function selectVisa(el){
+  document.querySelectorAll('.visa-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedVisaType = el.textContent.trim() === '잘 모르겠어요' ? 'UNKNOWN' : el.textContent.trim();
+}
+
+function finishOnboarding(){
+  completeOnboarding();
+  applyProfileUI();
+  renderResultSummary();
+  goToStep(5);
+}
+
+function goHome(){ switchScreen('home'); }
+
+function restartOnboarding(){
+  goToStep(0);
+  document.getElementById('obStartBtn').style.display='block';
+  const introSub = document.getElementById('obTitle').nextElementSibling;
+  if(introSub) introSub.style.display='block';
+  localStorage.removeItem(LS_KEYS.onboarding);
+  localStorage.removeItem(LS_KEYS.profile);
+  obProfile = { residence:'익산시', ageBand:'20s', employment:'employed', companyLocal:'익산시', incomeBand:'200to300', assetBand:'none', hasDebt:'no', nationality:'korean' };
+  selectedVisaType = 'UNKNOWN';
+  
+  // 리셋 뷰
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
+  // 기본값 설정 로직 추가 생략 (HTML 기본 selected로 대체)
+  switchScreen('onboard');
+}
+
+function applyProfileUI(){
+  const isForeign = obProfile.nationality === 'foreigner';
+  const nameMap = {
+    ko: isForeign ? 'Mina' : '김나은',
+    en: isForeign ? 'Mina' : 'Naeun Kim',
+    zh: isForeign ? 'Mina' : '金娜恩'
+  };
+  const userName = nameMap[currentLang] || nameMap['ko'];
+  const greetPrefix = { ko: '안녕하세요, ', en: 'Welcome, ', zh: '您好，' };
+  const greetSuffix = { ko: '님', en: '', zh: '' };
+  document.getElementById('homeGreeting').textContent = `${greetPrefix[currentLang]||greetPrefix['ko']}${userName}${greetSuffix[currentLang]||greetSuffix['ko']}`;
+  document.getElementById('profileName').textContent = userName;
+  document.getElementById('profileSub').textContent = `${getAgeBandLabel(obProfile.ageBand)} · ${getCityLabel(obProfile.residence)} · ${getEmploymentLabel(obProfile.employment)}`;
+  document.getElementById('avatarInitial').textContent = isForeign ? 'M' : (currentLang === 'en' ? 'N' : '나');
+  document.getElementById('foreignFinanceBox').style.display = isForeign ? 'block' : 'none';
+  renderProfileConditions();
+}
+
+function renderProfileConditions(){
+  const chips = [
+    getAgeBandLabel(obProfile.ageBand),
+    getCityLabel(obProfile.residence),
+    getEmploymentLabel(obProfile.employment),
+    getIncomeBandLabel(obProfile.incomeBand)
+  ];
+  document.getElementById('conditionChips').innerHTML = chips.map(t=>`<span class="condition-chip">${escapeHtml(t)}</span>`).join('');
+  document.getElementById('infoResidence').textContent = getCityLabel(obProfile.residence);
+  document.getElementById('infoEmployment').textContent = getEmploymentLabel(obProfile.employment);
+  document.getElementById('companyLocalRow').style.display = obProfile.employment==='employed' ? 'flex' : 'none';
+  document.getElementById('infoCompanyLocal').textContent = getCityLabel(obProfile.companyLocal || '익산시');
+  document.getElementById('infoIncome').textContent = getIncomeBandLabel(obProfile.incomeBand);
+  document.getElementById('infoAsset').textContent = getAssetBandLabel(obProfile.assetBand);
+  
+  const natTxt = {
+    ko: obProfile.nationality === 'foreigner' ? '외국 국적' : '대한민국 국적',
+    en: obProfile.nationality === 'foreigner' ? 'Foreigner' : 'Republic of Korea',
+    zh: obProfile.nationality === 'foreigner' ? '外国国籍' : '大韩民国国籍'
+  };
+  document.getElementById('infoNationality').textContent = natTxt[currentLang] || natTxt['ko'];
+  document.getElementById('visaRow').style.display = obProfile.nationality === 'foreigner' ? 'flex' : 'none';
+  document.getElementById('visaValue').textContent = selectedVisaType || 'UNKNOWN';
+}
+
+function renderResultSummary(){
+  const user = getCurrentUser();
+  const results = policies.map(p => getPolicyEligibility(user,p));
+  const eligible = results.filter(r=>r.status==='eligible').length;
+  const conditional = results.filter(r=>r.status==='conditional').length;
+  const restricted = results.filter(r=>r.status==='restricted').length;
+  
+  document.getElementById('obResultSub').innerHTML = `<b>${user.residence}</b> 거주 <b>${AGE_BAND_LABEL[user.ageBand]}</b> <b>${EMPLOYMENT_LABEL[user.employment]}</b> 기준`;
+  document.getElementById('obMatchSummary').innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="color: var(--success);">🟢 바로 참여 가능 혜택</span>
+        <span style="font-size:16px; font-weight:800;">${eligible}건</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="color: var(--warning);">🟡 추가 조건 확인 필요</span>
+        <span style="font-size:16px; font-weight:800;">${conditional}건</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="color: var(--danger);">🔴 대상에서 제외</span>
+        <span style="font-size:16px; font-weight:800;">${restricted}건</span>
+    </div>
+  `;
+}
+
+function openSheet(){ document.getElementById('sheetOverlay').classList.add('show'); }
+function closeSheet(){ document.getElementById('sheetOverlay').classList.remove('show'); }
+function closeSheetBg(e){ if(e.target.id==='sheetOverlay') closeSheet(); }
+
+
+function closeSheetBgId(e,id){ if(e.target.id===id) document.getElementById(id).classList.remove('show'); }
+
+function openProfileEditModal(){
+  document.getElementById('editResidence').value = obProfile.residence;
+  const setPicker = (containerId, val) => {
+    document.querySelectorAll(`#${containerId} .cat-chip`).forEach(chip => {
+      chip.classList.toggle('selected', chip.dataset.val === val);
+    });
+  };
+  setPicker('editAgeBand', obProfile.ageBand);
+  setPicker('editEmployment', obProfile.employment);
+  setPicker('editIncomeBand', obProfile.incomeBand);
+  document.getElementById('profileEditModal').classList.add('show');
+}
+
+function saveProfileEdit(){
+  obProfile.residence = document.getElementById('editResidence').value;
+  const getSelected = (containerId) => {
+    const sel = document.querySelector(`#${containerId} .cat-chip.selected`);
+    return sel ? sel.dataset.val : null;
+  };
+  const age = getSelected('editAgeBand');
+  const emp = getSelected('editEmployment');
+  const inc = getSelected('editIncomeBand');
+  if(age) obProfile.ageBand = age;
+  if(emp) obProfile.employment = emp;
+  if(inc) obProfile.incomeBand = inc;
+  
+  localStorage.setItem(LS_KEYS.profile, JSON.stringify({ ...obProfile, visaType: selectedVisaType }));
+  applyProfileUI();
+  closeSheetBgId({target:{id:'profileEditModal'}}, 'profileEditModal');
+  renderPolicyScreen();
+}
+
+/* Data & State Constants */
+const LS_KEYS = {
+  profile: 'jitech_user_profile_v2',
+  financial: 'jitech_financial_data_v2',
+  expenses: 'jitech_expenses_v2',
+  onboarding: 'jitech_onboarding_completed_v2'
+};
+const DEFAULT_FINANCE = { income: 2700000, fixed: 630000 };
+const DEFAULT_EXPENSES = [
+  { id:1, label:'이마트 장보기', cat:'식비', amount:125000 },
+  { id:2, label:'배달의민족', cat:'식비', amount:48000 },
+  { id:3, label:'알뜰교통카드 정산', cat:'교통', amount:74000 },
+  { id:4, label:'넷플릭스 등 구독', cat:'여가', amount:25000 }
+];
+const ASSET_BASE = 1960000;
+let selectedVisaType = 'UNKNOWN';
+let selectedExpenseCat = '식비';
+let obProfile = { residence:'익산시', ageBand:'20s', employment:'employed', companyLocal:'익산시', incomeBand:'200to300', assetBand:'none', hasDebt:'no', nationality:'korean' };
+
+const CITY_LABELS = {
+  '전주시': { ko: '전주시', en: 'Jeonju-si', zh: '全州市' },
+  '군산시': { ko: '군산시', en: 'Gunsan-si', zh: '群山市' },
+  '익산시': { ko: '익산시', en: 'Iksan-si', zh: '益山市' },
+  '정읍시': { ko: '정읍시', en: 'Jeongeup-si', zh: '井邑市' },
+  '남원시': { ko: '남원시', en: 'Namwon-si', zh: '南原市' },
+  '김제시': { ko: '김제시', en: 'Gimje-si', zh: '金堤市' },
+  '완주군': { ko: '완주군', en: 'Wanju-gun', zh: '完州郡' },
+  '진안군': { ko: '진안군', en: 'Jinan-gun', zh: '镇安郡' },
+  '무주군': { ko: '무주군', en: 'Muju-gun', zh: '茂朱郡' },
+  '장수군': { ko: '장수군', en: 'Jangsu-gun', zh: '长水郡' },
+  '임실군': { ko: '임실군', en: 'Imsil-gun', zh: '任实郡' },
+  '순창군': { ko: '순창군', en: 'Sunchang-gun', zh: '淳昌郡' },
+  '고창군': { ko: '고창군', en: 'Gochang-gun', zh: '高敞郡' },
+  '부안군': { ko: '부안군', en: 'Buan-gun', zh: '扶安郡' }
+};
+
+function getCityLabel(cityKey) {
+  if(!cityKey) return cityKey;
+  const item = CITY_LABELS[cityKey];
+  if(!item) return cityKey;
+  return item[currentLang] || item['ko'];
+}
+
+function updateCitySelects() {
+  const selectIds = ['obResidence', 'obCompanyLocal', 'policyResidenceSelect', 'editResidence'];
+  selectIds.forEach(id => {
+    const sel = document.getElementById(id);
+    if(sel) {
+      Array.from(sel.options).forEach(opt => {
+        const val = opt.value;
+        opt.textContent = getCityLabel(val);
+      });
+    }
+  });
+}
+
+const AGE_BAND_LABELS = {
+  ko: { '10s':'19세 이하', '20s':'20대', '30s':'30대', '40s':'40세 이상' },
+  en: { '10s':'Under 19', '20s':'20s', '30s':'30s', '40s':'40s+' },
+  zh: { '10s':'19岁以下', '20s':'20多岁', '30s':'30多岁', '40s':'40岁以上' }
+};
+
+const EMPLOYMENT_LABELS = {
+  ko: { employed:'재직 중', freelance:'프리랜서·자영업' },
+  en: { employed:'Employed', freelance:'Freelance/Self-employed' },
+  zh: { employed:'在职', freelance:'自由职业·自营业' }
+};
+
+const INCOME_BAND_LABELS = {
+  ko: { under200:'200만원 미만', '200to300':'200~300만원', '300to400':'300~400만원', over400:'400만원 이상' },
+  en: { under200:'Under 2M KRW', '200to300':'2M~3M KRW', '300to400':'3M~4M KRW', over400:'Over 4M KRW' },
+  zh: { under200:'低于200万韩元', '200to300':'200~300万韩元', '300to400':'300~400万韩元', over400:'400万韩元以上' }
+};
+
+const ASSET_BAND_LABELS = {
+  ko: { none:'거의 없음', under1000:'1,000만원 미만', '1000to3000':'1,000~3,000만원', over3000:'3,000만원 이상' },
+  en: { none:'Almost None', under1000:'Under 10M KRW', '1000to3000':'10M~30M KRW', over3000:'Over 30M KRW' },
+  zh: { none:'几乎没有', under1000:'低于1,000万韩元', '1000to3000':'1,000~3,000万韩元', over3000:'3,000万韩元以上' }
+};
+
+function getAgeBandLabel(val) {
+  const dict = AGE_BAND_LABELS[currentLang] || AGE_BAND_LABELS['ko'];
+  return dict[val] || val;
+}
+function getEmploymentLabel(val) {
+  const dict = EMPLOYMENT_LABELS[currentLang] || EMPLOYMENT_LABELS['ko'];
+  return dict[val] || val;
+}
+function getIncomeBandLabel(val) {
+  const dict = INCOME_BAND_LABELS[currentLang] || INCOME_BAND_LABELS['ko'];
+  return dict[val] || val;
+}
+function getAssetBandLabel(val) {
+  const dict = ASSET_BAND_LABELS[currentLang] || ASSET_BAND_LABELS['ko'];
+  return dict[val] || val;
+}
+
+const AGE_BAND_LABEL = new Proxy({}, { get: (target, prop) => getAgeBandLabel(prop) });
+const AGE_BAND_VALUE = { '10s':19, '20s':27, '30s':33, '40s':42 };
+const EMPLOYMENT_LABEL = new Proxy({}, { get: (target, prop) => getEmploymentLabel(prop) });
+const INCOME_BAND_LABEL = new Proxy({}, { get: (target, prop) => getIncomeBandLabel(prop) });
+const INCOME_BAND_VALUE = { under200:1800000, '200to300':2500000, '300to400':3500000, over400:4500000 };
+const ASSET_BAND_LABEL = new Proxy({}, { get: (target, prop) => getAssetBandLabel(prop) });
+
+const EXPENSE_I18N = {
+  '이마트 장보기': { ko: '이마트 장보기', en: 'Emart Grocery', zh: '易买得 购物' },
+  '배달의민족': { ko: '배달의민족', en: 'Baedal Minzok (Food Delivery)', zh: '外卖的外族' },
+  '알뜰교통카드 정산': { ko: '알뜰교통카드 정산', en: 'Thrifty Transit Card Settlement', zh: '省钱交通卡 结算' },
+  '넷플릭스 등 구독': { ko: '넷플릭스 등 구독', en: 'Netflix Subscription', zh: 'Netflix 等订阅' },
+  '전북은행 체크카드 (다이소)': { ko: '전북은행 체크카드 (다이소)', en: 'JB Bank Debit Card (Daiso)', zh: '全北银行借记卡 (Daiso)' },
+  'KB Pay 결제 (스타벅스 익산점)': { ko: 'KB Pay 결제 (스타벅스 익산점)', en: 'KB Pay (Starbucks Iksan)', zh: 'KB Pay 支付 (星巴克益山店)' },
+  '네이버페이 결제 (배달의민족)': { ko: '네이버페이 결제 (배달의민족)', en: 'Naver Pay (Food Delivery)', zh: 'Naver Pay 支付 (外卖的外族)' }
+};
+const ASSET_BAND_VALUE = { none:0, under1000:5000000, '1000to3000':20000000, over3000:40000000 };
+
+let state = { finance: DEFAULT_FINANCE, expenses: DEFAULT_EXPENSES.slice() };
+
+function loadState(){
+  try{
+    const f = localStorage.getItem(LS_KEYS.financial);
+    const ex = localStorage.getItem(LS_KEYS.expenses);
+    state.finance = f ? JSON.parse(f) : { ...DEFAULT_FINANCE };
+    state.expenses = ex ? JSON.parse(ex) : DEFAULT_EXPENSES.slice();
+  } catch(err){
+    state.finance = { ...DEFAULT_FINANCE };
+    state.expenses = DEFAULT_EXPENSES.slice();
+  }
+}
+function persistExpenses(){
+  localStorage.setItem(LS_KEYS.financial, JSON.stringify(state.finance));
+  localStorage.setItem(LS_KEYS.expenses, JSON.stringify(state.expenses));
+}
+function completeOnboarding(){
+  const profile = { ...obProfile, visaType: selectedVisaType };
+  localStorage.setItem(LS_KEYS.profile, JSON.stringify(profile));
+  localStorage.setItem(LS_KEYS.onboarding, 'true');
+}
+
+function formatWon(n){ return '₩' + Math.round(n).toLocaleString('ko-KR'); }
+function escapeHtml(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+/* Policies Data */
+const CAT_META = { finance:{ icon:'💰', label:'금융 지원' }, housing:{ icon:'🏛', label:'주거·독립' }, living:{ icon:'🌿', label:'생활·복지' } };
+
+const policies = [
+  { id:'ref-002', title:'전주시 금융복지상담소 채무상담', org:'전주시복지재단', category:'finance', finType:'상담', finProvider:'지자체', referral:true, benefit:'1:1 무료 채무조정 맞춤 상담',
+    description:'학자금 대출 및 부채를 지닌 청년들을 위해 1:1 맞춤형 채무상담, 개인회생·파산 등 빠른 부채 탈출 솔루션과 합리적인 상환 플랜을 무료로 지원합니다.',
+    url:'https://jjfwc.jjwf.or.kr/adjustment',
+    eligibility:{ foreignerStatus:'eligible', regionScope:['전주시'] } },
+
+  { id:'ref-001', title:'서민금융진흥원 온라인 재무진단', org:'서민금융진흥원', category:'finance', finType:'진단', finProvider:'정부', referral:true, benefit:'소득·지출·신용 현황 무료 분석',
+    description:'부채 관리가 시급한 취업 청년의 신용점수 및 소득을 분석하여 효율적인 상환 방안과 공공 서민금융 상품을 매칭해 드립니다.',
+    url:'https://www.kinfa.or.kr/',
+    eligibility:{ foreignerStatus:'conditional', regionScope:'nationwide' } },
+
+  { id:'policy-jb-double', title:'전북청년 함께 두배적금', org:'전북특별자치도', category:'finance', finType:'지원금', finProvider:'지자체', benefit:'만기 시 480만원 + ∝ (원금 2배)',
+    description:'월 10만원 저축 시 지자체가 10만원을 1:1로 매칭 지원하는 자산형성 적금. 만 18~39세 전북 거주 근로 청년을 대상으로 합니다.',
+    url:'https://double.jb2030.or.kr',
+    eligibility:{ minAge:18, maxAge:39, requiresEmployed:true, maxIncome:3350000, foreignerStatus:'conditional', regionScope:'jeonbuk' } },
+
+  { id:'policy-iksan-care', title:'초등돌봄 청년선생님 지원사업', org:'기쁨누리청년사업단', category:'living', finType:'일자리', finProvider:'지자체', benefit:'N잡 가능 유연 근로 기회 제공',
+    description:'저녁 시간을 활용하여 본업과 병행할 수 있는 초등 돌봄 학습 지도 교사 활동입니다. 만 20~39세 익산시 청년을 우선 선발합니다.',
+    url:'https://www.instagram.com/gbgb_2023/',
+    eligibility:{ minAge:20, maxAge:39, foreignerStatus:'eligible', regionScope:['익산시'] } },
+
+  { id:'policy-tax-001', title:'중소기업 취업청년 소득세 감면', org:'국세청', category:'finance', finType:'절세', finProvider:'정부', benefit:'소득세 최대 90% (연 200만원 한도) 감면',
+    description:'중소기업에 취업한 만 15~34세 청년을 대상으로 취업일부터 5년간 발생한 소득세를 최대 90% 감면해주는 정부 절세 혜택입니다.',
+    url:'https://www.nts.go.kr',
+    eligibility:{ minAge:15, maxAge:34, requiresEmployed:true, foreignerStatus:'conditional', regionScope:'nationwide' } },
+
+  { id:'policy-002', title:'전북 청년 전월세 보증금 이자지원', org:'전북특별자치도', category:'housing', benefit:'전월세 대출 이자 지원',
+    description:'청년의 독립 및 주거비 부담 완화를 위해 전세 및 월세 보증금 대출 이자의 일부를 지원합니다.',
+    eligibility:{ minAge:19, maxAge:39, foreignerStatus:'conditional', regionScope:'jeonbuk' } },
+
+  { id:'policy-006', title:'전북 청년 일자리 도약 장려금', org:'전북청년허브센터', category:'finance', finType:'지원금', finProvider:'지자체', benefit:'근속 시 도약 장려금 현금 지급',
+    description:'전북 소재 중소기업에 정규직으로 취업하여 장기 근속하는 청년에게 일정 기간마다 장려금을 지원합니다.',
+    url:'https://www.jb2030.or.kr',
+    eligibility:{ minAge:15, maxAge:34, requiresEmployed:true, requiresLocalCompany:true, foreignerStatus:'conditional', regionScope:'jeonbuk' } },
+
+    { id:'prod-002', title:'청년미래적금', org:'시중 주요 은행 공통', category:'finance', finType:'적금', finProvider:'은행', infoOnly:true, benefit:'3년 만기 고금리 & 자산형성 지원',
+    description:'만 19~34세 청년을 대상으로 3년 단기/중기 목돈 마련을 돕는 정부 연계 우대금리 적금 상품입니다.',
+    url:'https://finlife.fss.or.kr',
+    eligibility:{ minAge:19, maxAge:34, maxIncome:5000000, foreignerStatus:'eligible' } }
+  ,
+  { id:'prod-001', title:'청년도약계좌', org:'시중 11개 은행 공통', category:'finance', finType:'적금', finProvider:'은행', infoOnly:true, benefit:'비과세 혜택 및 정부기여금 최대 지급',
+    description:'만 19~34세 청년을 대상으로 정부 기여금과 비과세 혜택을 제공하여 목돈 마련을 돕는 5년 만기 정책형 적금입니다.',
+    url:'https://finlife.fss.or.kr',
+    eligibility:{ minAge:19, maxAge:34, maxIncome:6000000, foreignerStatus:'eligible' } }
+  ,
+  { id:'policy-iksan-saemschool', title:'익산 청년시청 청년샘스쿨', org:'익산 청년시청', category:'living', finType:'일자리', finProvider:'지자체', benefit:'강사료 1시간 30,000원 (최대 6시간)',
+    description:'자신의 재능과 지식을 나누는 청년샘스쿨 강사로 활동하며 강사료를 지원받고 소득을 창출할 수 있는 프로그램입니다.',
+    url:'https://youthforest.iksan.go.kr/board/view.iksan?boardId=BBS_0000015&menuCd=DOM_000000105002001000&paging=ok&startPage=1&searchType=DATA_ti&searchOperation=AND&keyword=%EB%A9%B4%EC%A0%91%EC%A0%95%EC%9E%A5&dataSid=44826',
+    eligibility:{ minAge:18, maxAge:39, foreignerStatus:'conditional', regionScope:['익산시'] } }
+  ,
+  { id:'policy-iksan-welcomebox', title:'익산시 전입청년 웰컴박스', org:'익산시', category:'living', finType:'지원품', finProvider:'지자체', benefit:'전입 축하 웰컴박스 제공',
+    description:'익산시로 전입한 청년들의 새로운 출발을 응원하고 안정적인 정착을 돕기 위해 전입 축하 웰컴박스를 제공합니다.',
+    url:'https://youthforest.iksan.go.kr/board/view.iksan?boardId=BBS_0000015&menuCd=DOM_000000105002001000&paging=ok&startPage=1&dataSid=44274',
+    eligibility:{ minAge:18, maxAge:39, foreignerStatus:'conditional', regionScope:['익산시'] } }
+];
+
+function getCurrentUser(){
+  return {
+    residence: obProfile.residence,
+    ageBand: obProfile.ageBand,
+    age: AGE_BAND_VALUE[obProfile.ageBand] || 27,
+    employment: obProfile.employment,
+    companyLocal: obProfile.companyLocal,
+    incomeBand: obProfile.incomeBand,
+    income: INCOME_BAND_VALUE[obProfile.incomeBand] || 2500000,
+    assetBand: obProfile.assetBand,
+    asset: ASSET_BAND_VALUE[obProfile.assetBand] || 0,
+    hasDebt: obProfile.hasDebt === 'yes',
+    nationality: obProfile.nationality,
+    visaType: selectedVisaType || 'UNKNOWN'
+  };
+}
+
+function policyVisibleForUser(policy, user){
+  const scope = policy?.eligibility?.regionScope;
+  if(!scope || scope === 'nationwide' || scope === 'jeonbuk') return true;
+  if(Array.isArray(scope)) return scope.includes(user.residence);
+  return true;
+}
+
+function getPolicyEligibility(user, policy){
+  const e = policy.eligibility;
+  if(e.regionScope && e.regionScope !== 'nationwide' && e.regionScope !== 'jeonbuk'){
+    if(!e.regionScope.includes(user.residence)){
+      return { status:'restricted', reason:`현재 거주지(${user.residence})는 지원 대상 지역이 아닙니다. (${e.regionScope.join(', ')} 전용)` };
+    }
+  }
+  if(e.minAge != null && user.age < e.minAge) return { status:'restricted', reason:`연령 조건(최소 ${e.minAge}세) 미달` };
+  if(e.maxAge != null && user.age > e.maxAge) return { status:'restricted', reason:`연령 조건(최대 ${e.maxAge}세) 초과` };
+  if(e.requiresEmployed && user.employment !== 'employed' && user.employment !== 'freelance'){
+    return { status:'restricted', reason:'구직 상태이므로 근로자 대상 혜택에서 제외될 수 있습니다.' };
+  }
+  if(e.requiresLocalCompany && user.employment==='employed' && !user.companyLocal){
+    return { status:'conditional', reason:'소속 기업이 전북 소재인지 증빙 서류 확인이 필요합니다.' };
+  }
+  if(e.maxIncome != null && user.income > e.maxIncome){
+    return { status:'conditional', reason:`소득 상한 기준 요건 확인이 필요합니다.` };
+  }
+  if(user.nationality === 'foreigner'){
+    if(e.foreignerStatus === 'eligible') return { status:'eligible', reason:`외국인 근로자도 바로 신청 가능합니다.` };
+    if(e.foreignerStatus === 'conditional') return { status:'conditional', reason:'체류자격(비자) 및 거주 요건 등 추가 심사가 필요합니다.' };
+    return { status:'restricted', reason:'현재 외국 국적자는 지원 대상에 포함되지 않을 수 있습니다.' };
+  }
+  return { status:'eligible', reason:`조건 충족. 해당 기관 사이트에서 신청 가능합니다.` };
+}
+
+function policyCardHTML(policyObj, result){
+  const policy = getLocalizedPolicy(policyObj);
+  const catLabels = {
+    finance: { icon:'💰', ko:'금융 지원', en:'Financial Support', zh:'金融支援' },
+    housing: { icon:'🏛', ko:'주거·독립', en:'Housing & Living', zh:'住房·独立' },
+    living: { icon:'🌿', ko:'생활·복지', en:'Living & Welfare', zh:'生活·福利' }
+  };
+  const cat = catLabels[policy.category] || {icon:'📌', ko:'기타', en:'Other', zh:'其他'};
+  const catTxt = cat[currentLang] || cat['ko'];
+
+  const isProduct = policy.infoOnly === true;
+  const orgLine = policy.org ? `<div style="font-size:12px;color:var(--text-muted);font-weight:700;margin:-4px 0 8px;">${escapeHtml(policy.org)}</div>` : '';
+  const finTag = (policy.category==='finance' && policy.finType) ? `<div style="font-size:11px;color:var(--primary);font-weight:700;background:var(--primary-light);display:inline-block;padding:4px 10px;border-radius:var(--radius-full);margin:0 6px 10px 0;">${escapeHtml(policy.finType)} · ${escapeHtml(policy.finProvider)}</div>` : '';
+  
+  const regionScope = policy.eligibility.regionScope;
+  const regionLabels = {
+    ko: !regionScope ? '' : regionScope==='nationwide' ? '📍 전국 공통' : regionScope==='jeonbuk' ? '📍 전북 전역' : `📍 ${regionScope.join(', ')} 특화`,
+    en: !regionScope ? '' : regionScope==='nationwide' ? '📍 Nationwide' : regionScope==='jeonbuk' ? '📍 All Jeonbuk' : `📍 ${regionScope.join(', ')} Only`,
+    zh: !regionScope ? '' : regionScope==='nationwide' ? '📍 适用全国' : regionScope==='jeonbuk' ? '📍 全北全境' : `📍 ${regionScope.join(', ')} 专属`
+  };
+  const regionLabel = regionLabels[currentLang] || regionLabels['ko'];
+  const regionTag = regionLabel ? `<div style="font-size:11px;color:#166534;font-weight:700;background:#DCFCE7;display:inline-block;padding:4px 10px;border-radius:var(--radius-full);margin:0 0 10px;">${regionLabel}</div>` : '';
+  
+  const extTxt = { ko: '공식 사이트에서 자세히 보기 →', en: 'View Details on Official Site →', zh: '在官方网站查看详情 →' };
+  const extLink = policy.url ? `<a class="ext-link" href="${policy.url}" target="_blank" rel="noopener noreferrer">${extTxt[currentLang] || extTxt['ko']}</a>` : '';
+
+  const prodBadge = { ko: '💡 추천 금융상품', en: '💡 Recommended Product', zh: '💡 推荐金融产品' };
+  const benefitTxt = { ko: '주요 혜택', en: 'Key Benefits', zh: '主要福利' };
+  const expBenefitTxt = { ko: '예상 혜택', en: 'Expected Benefits', zh: '预计福利' };
+
+  if(isProduct){
+    return `<div class="policy-card cat-${policy.category}">
+      <div class="cat">${cat.icon} ${catTxt}</div>
+      <div class="title">${escapeHtml(policy.title)}</div>
+      <div>${finTag}${regionTag}</div>
+      ${orgLine}
+      <span class="badge info" style="margin-bottom: 8px;">${prodBadge[currentLang]||prodBadge['ko']}</span>
+      <div class="desc">${escapeHtml(policy.description)}</div>
+      <div class="benefit">${benefitTxt[currentLang]||benefitTxt['ko']}</div><b>${escapeHtml(policy.benefit)}</b>
+      ${extLink}
+    </div>`;
+  }
+
+  const badgeTexts = {
+    eligible: { ko: '🟢 바로 참여 가능', en: '🟢 Immediately Eligible', zh: '🟢 可直接参与' },
+    conditional: { ko: '🟡 조건 확인 필요', en: '🟡 Needs Verification', zh: '🟡 需确认条件' },
+    restricted: { ko: '🔴 참여 제한 가능', en: '🔴 Restricted', zh: '🔴 受限' }
+  };
+  const ctaWhy = { ko: '왜 조건 확인이 필요한가요?', en: 'Why is verification needed?', zh: '为什么需要确认条件？' };
+  const ctaReason = { ko: '제한 사유 보기', en: 'View Restriction Reason', zh: '查看受限原因' };
+
+  let badge, extra;
+  if(result.status === 'eligible'){
+    badge = `<span class="badge eligible">${badgeTexts.eligible[currentLang]||badgeTexts.eligible['ko']}</span>`;
+    extra = `<div class="benefit">${expBenefitTxt[currentLang]||expBenefitTxt['ko']}</div><b>${escapeHtml(policy.benefit)}</b>`;
+  } else if(result.status === 'conditional'){
+    badge = `<span class="badge conditional">${badgeTexts.conditional[currentLang]||badgeTexts.conditional['ko']}</span>`;
+    extra = `<button class="cta" data-reason="${escapeHtml(result.reason)}" onclick="openReasonSheet(this)">${ctaWhy[currentLang]||ctaWhy['ko']}</button>`;
+  } else {
+    badge = `<span class="badge restricted">${badgeTexts.restricted[currentLang]||badgeTexts.restricted['ko']}</span>`;
+    extra = `<button class="cta" data-reason="${escapeHtml(result.reason)}" onclick="openReasonSheet(this)">${ctaReason[currentLang]||ctaReason['ko']}</button>`;
+  }
+
+  return `<div class="policy-card cat-${policy.category}">
+    <div class="cat">${cat.icon} ${catTxt}</div>
+    <div class="title">${escapeHtml(policy.title)}</div>
+    <div>${finTag}${regionTag}</div>
+    ${orgLine}
+    <div style="margin-bottom: 8px;">${badge}</div>
+    <div class="desc">${escapeHtml(result.status==='eligible' ? policy.description : result.reason)}</div>
+    ${extra}
+    ${result.status==='eligible' ? extLink : ''}
+  </div>`;
+}
+
+function openReasonSheet(el){
+  document.getElementById('sheetReasonText').innerHTML = escapeHtml(el.dataset.reason) + '<br/><br/><i>정확한 요건은 지자체 및 기관의 공식 공고문을 확인해 주세요.</i>';
+  openSheet();
+}
+
+let selectedCategory = 'all';
+let onlyEligible = false;
+
+function renderPolicyScreen(){
+  document.getElementById('policyResidenceSelect').value = obProfile.residence;
+  const user = getCurrentUser();
+  const list = document.getElementById('policyList');
+  const rows = policies
+    .filter(p => policyVisibleForUser(p, user))
+    .filter(p => selectedCategory==='all' || p.category===selectedCategory)
+    .map(p => ({ policy:p, result:getPolicyEligibility(user,p) }))
+    .filter(r => !onlyEligible || r.result.status==='eligible');
+
+  list.innerHTML = rows.length
+    ? rows.map(r => policyCardHTML(r.policy, r.result)).join('')
+    : '<div style="font-size:14px;color:var(--text-muted);padding:32px; background: #fff; border-radius: var(--radius-md); text-align:center; grid-column: 1/-1;">선택하신 조건에 맞는 혜택이 없습니다. 조건을 변경해보세요.</div>';
+}
+
+function renderHomePolicyMini(){
+  const user = getCurrentUser();
+  const govResults = policies
+    .filter(p => policyVisibleForUser(p, user) && !p.infoOnly)
+    .map(p => ({ policy:getLocalizedPolicy(p), result:getPolicyEligibility(user,p) }));
+
+  document.getElementById('homePolicyList').innerHTML = govResults.slice(0,3).map(({policy,result}) => {
+    const badge = result.status==='eligible' ? '<span class="badge eligible">🟢</span>'
+      : result.status==='conditional' ? '<span class="badge conditional">🟡</span>'
+      : '<span class="badge restricted">🔴</span>';
+    return `<div class="policy-mini" onclick="switchScreen('policy')"><span class="name">${escapeHtml(policy.title)}</span>${badge}</div>`;
+  }).join('');
+
+  const productBadgeText = { ko: '💡 상품', en: '💡 Product', zh: '💡 产品' };
+  const productResults = policies.filter(p => p.infoOnly).map(p => ({ policy:getLocalizedPolicy(p), result:getPolicyEligibility(user,p) }));
+  document.getElementById('homeProductList').innerHTML = productResults.slice(0,3).map(({policy}) => {
+    return `<div class="policy-mini" onclick="switchScreen('policy')">
+      <span class="name">${escapeHtml(policy.title)}<br/><span style="font-size:12px;color:var(--text-muted);font-weight:500;">${escapeHtml(policy.org||'')}</span></span>
+      <span class="badge info">${productBadgeText[currentLang]||productBadgeText['ko']}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('homeConditionalCount').textContent = govResults.filter(r => r.result.status==='conditional').length;
+  document.getElementById('homeEligibleCount').textContent = govResults.filter(r => r.result.status==='eligible').length;
+}
+
+function computeFinanceTotals(){
+  const variableTotal = state.expenses.reduce((s,e) => s+e.amount, 0);
+  const remain = state.finance.income - state.finance.fixed - variableTotal;
+  const totalSpending = state.finance.fixed + variableTotal;
+  const catTotals = { 주거: state.finance.fixed };
+  state.expenses.forEach(e => { catTotals[e.cat] = (catTotals[e.cat]||0) + e.amount; });
+  return { variableTotal, remain, totalSpending, catTotals };
+}
+
+function renderDonutChart(catTotals, total){
+  const order = ['주거','식비','교통','여가','기타'];
+  const catI18n = {
+    ko: { 주거:'주거', 식비:'식비', 교통:'교통', 여가:'여가', 기타:'기타' },
+    en: { 주거:'Housing', 식비:'Food', 교통:'Transport', 여가:'Leisure', 기타:'Other' },
+    zh: { 주거:'住房', 식비:'餐饮', 교통:'交通', 여가:'娱乐', 기타:'其他' }
+  };
+  const colors = { 주거:'#3B82F6', 식비:'#10B981', 교통:'#8B5CF6', 여가:'#F59E0B', 기타:'#64748B' };
+  let cum = 0;
+  const stops = [];
+  const legend = [];
+  
+  order.forEach(cat => {
+    const amt = catTotals[cat] || 0;
+    if(amt <= 0) return;
+    const pct = total > 0 ? (amt/total*100) : 0;
+    stops.push(`${colors[cat]} ${cum}% ${cum+pct}%`);
+    legend.push(`
+      <div style="display:flex;align-items:center;justify-content:space-between; font-size:13px; margin-bottom: 4px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:10px;height:10px;border-radius:2px;background:${colors[cat]};"></div>
+            <span style="color:var(--text-muted); font-weight:600;">${(catI18n[currentLang]||catI18n['ko'])[cat]||cat}</span>
+        </div>
+        <b style="color:var(--text-main);">${Math.round(pct)}%</b>
+      </div>
+    `);
+    cum += pct;
+  });
+  document.getElementById('donutChart').style.background = stops.length ? `conic-gradient(${stops.join(', ')})` : '#E2E8F0';
+  document.getElementById('donutTotal').textContent = formatWon(total);
+  document.getElementById('chartLegend').innerHTML = legend.join('');
+}
+
+function renderExpenseList(){
+  const container = document.getElementById('expenseList');
+  if(state.expenses.length === 0){
+    const emptyTxt = { ko: '등록된 지출이 없습니다.', en: 'No expenses recorded.', zh: '暂无已记录的支出。' };
+    container.innerHTML = `<div style="font-size:14px;color:var(--text-muted);text-align:center;padding:24px;">${emptyTxt[currentLang]||emptyTxt['ko']}</div>`;
+    return;
+  }
+  const catDict = {
+    ko: { 식비:'식비', 교통:'교통', 여가:'여가', 생활:'생활', 주거:'주거' },
+    en: { 식비:'Food', 교통:'Transport', 여가:'Leisure', 생활:'Living', 주거:'Housing' },
+    zh: { 식비:'餐饮', 교통:'交通', 여가:'娱乐', 생활:'生活', 주거:'住房' }
+  };
+  container.innerHTML = state.expenses.slice().reverse().map(e => {
+    const itemI18n = EXPENSE_I18N[e.label];
+    const labelTxt = itemI18n ? (itemI18n[currentLang] || itemI18n['ko']) : e.label;
+    const catTxt = (catDict[currentLang] || catDict['ko'])[e.cat] || e.cat;
+    return `<div class="expense-row">
+      <div class="expense-row-info">
+        <div class="l">${escapeHtml(labelTxt)}</div>
+        <div class="c">${escapeHtml(catTxt)}</div>
+      </div>
+      <div class="expense-row-amt">-${formatWon(e.amount)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderReferralList(){
+  const user = getCurrentUser();
+  const referrals = policies.filter(p => p.referral === true && policyVisibleForUser(p, user));
+  const linkText = { ko: '상담 안내 바로가기 →', en: 'Go to Counseling Guide →', zh: '前往咨询指南 →' };
+  document.getElementById('referralList').innerHTML = referrals.map(pObj => {
+    const p = getLocalizedPolicy(pObj);
+    return `
+    <div style="border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;margin-bottom:12px;background:#fff;">
+      <div style="font-size:12px;color:var(--primary);font-weight:700; margin-bottom: 4px;">${escapeHtml(p.org)}</div>
+      <div style="font-size:15px;font-weight:800;color:var(--text-main); margin-bottom: 6px;">${escapeHtml(p.title)}</div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.5;">${escapeHtml(p.description)}</div>
+      <a href="${p.url}" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top: 12px; font-size:13px; font-weight:700; color:var(--primary);">${linkText[currentLang]||linkText['ko']}</a>
+    </div>
+  `}).join('');
+}
+
+function renderFinance(){
+  const t = computeFinanceTotals();
+  document.getElementById('finIncome').textContent = formatWon(state.finance.income);
+  document.getElementById('finFixed').textContent = formatWon(state.finance.fixed);
+  document.getElementById('finVariable').textContent = formatWon(t.variableTotal);
+  document.getElementById('finRemain').textContent = formatWon(t.remain);
+  renderExpenseList();
+  renderDonutChart(t.catTotals, t.totalSpending);
+  renderReferralList();
+  document.getElementById('homeIncome').textContent = formatWon(state.finance.income);
+  document.getElementById('homeSpending').textContent = formatWon(t.totalSpending);
+  document.getElementById('homeAssetValue').textContent = formatWon(ASSET_BASE + t.remain);
+}
+
+
+
+function updateRemitCalc(){
+  const amt = parseInt(document.getElementById('remitAmount').value, 10) || 0;
+  const currentFee = Math.round(amt*0.035);
+  const discountFee = Math.round(amt*0.012);
+  document.getElementById('remitCurrentFee').textContent = formatWon(currentFee);
+  document.getElementById('remitDiscountFee').textContent = formatWon(discountFee);
+  document.getElementById('remitSavings').textContent = formatWon(currentFee - discountFee);
+}
+
+/* Event Listeners */
+document.querySelectorAll('#filterRow .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#filterRow .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    selectedCategory = chip.dataset.cat;
+    renderPolicyScreen();
+  });
+});
+
+document.getElementById('onlyEligibleCheck').addEventListener('change', (e) => {
+  onlyEligible = e.target.checked;
+  renderPolicyScreen();
+});
+
+document.querySelectorAll('#expenseCatPicker .cat-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#expenseCatPicker .cat-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    selectedExpenseCat = chip.dataset.cat;
+  });
+});
+
+function wireChipGroup(containerId, onSelect){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.querySelectorAll('.cat-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      el.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      onSelect(chip.dataset.val);
+    });
+  });
+}
+
+wireChipGroup('obAgeBand', v => obProfile.ageBand = v);
+wireChipGroup('obEmployment', v => {
+  obProfile.employment = v;
+  document.getElementById('obCompanyLocalWrap').style.display = v==='employed' ? 'block' : 'none';
+});
+document.getElementById('obCompanyLocal').addEventListener('change', e => { obProfile.companyLocal = e.target.value; });
+wireChipGroup('obIncomeBand', v => obProfile.incomeBand = v);
+wireChipGroup('obAssetBand', v => obProfile.assetBand = v);
+wireChipGroup('obDebt', v => obProfile.hasDebt = v);
+wireChipGroup('obNationality', v => {
+  obProfile.nationality = v;
+  document.getElementById('obVisaWrap').style.display = v==='foreigner' ? 'block' : 'none';
+});
+
+wireChipGroup('editAgeBand', v => {});
+wireChipGroup('editEmployment', v => {});
+wireChipGroup('editIncomeBand', v => {});
+
+document.getElementById('obResidence').addEventListener('change', e => { obProfile.residence = e.target.value; });
+document.getElementById('policyResidenceSelect').addEventListener('change', e => {
+  obProfile.residence = e.target.value;
+  if(localStorage.getItem(LS_KEYS.onboarding) === 'true'){
+    localStorage.setItem(LS_KEYS.profile, JSON.stringify({ ...obProfile, visaType: selectedVisaType }));
+  }
+  renderPolicyScreen();
+  document.getElementById('infoResidence').textContent = obProfile.residence;
+});
+
+function init(){
+  loadState();
+  const onboardingDone = localStorage.getItem(LS_KEYS.onboarding) === 'true';
+  if(onboardingDone){
+    try{
+      const profile = JSON.parse(localStorage.getItem(LS_KEYS.profile));
+      if(profile){
+        obProfile = {
+          residence: profile.residence || '전주시',
+          ageBand: profile.ageBand || '20s',
+          employment: profile.employment || 'employed',
+          companyLocal: profile.companyLocal || 'yes',
+          incomeBand: profile.incomeBand || '200to300',
+          assetBand: profile.assetBand || 'none',
+          hasDebt: profile.hasDebt || 'no',
+          nationality: profile.nationality === 'foreigner' ? 'foreigner' : 'korean'
+        };
+        selectedVisaType = profile.visaType || 'UNKNOWN';
+        applyProfileUI();
+        switchScreen('home');
+        return;
+      }
+    } catch(err){ }
+  }
+  switchScreen('onboard');
+}
+
+
+/* Expense Refresh & Sync Logic */
+function refreshExpenses() {
+  const btn = document.querySelector('.add-expense-btn');
+  if(!btn) return;
+  
+  if(!isAssetSynced) {
+    alert("상단의 '자산 연동하기'를 먼저 진행해주세요.");
+    return;
+  }
+
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '🔄 오픈뱅킹망 조회 중...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    // Add new synced expense from linked card/bank
+    const syncedItems = [
+      { id: Date.now() + 1, label: '전북은행 체크카드 (다이소)', cat: '생활', amount: 32000 },
+      { id: Date.now() + 2, label: 'KB Pay 결제 (스타벅스 익산점)', cat: '식비', amount: 6500 },
+      { id: Date.now() + 3, label: '네이버페이 결제 (배달의민족)', cat: '식비', amount: 18900 }
+    ];
+    
+    let addedCount = 0;
+    syncedItems.forEach(item => {
+      if(!state.expenses.some(e => e.label === item.label)) {
+        state.expenses.push(item);
+        addedCount++;
+      }
+    });
+    
+    if(addedCount > 0) {
+      persistExpenses();
+      renderFinance();
+      btn.innerHTML = `✅ ${addedCount}건 갱신 완료!`;
+    } else {
+      btn.innerHTML = '✅ 최신 상태입니다';
+    }
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 1800);
+  }, 1200);
+}
+
+/* Asset Sync Simulation Logic */
+let isAssetSynced = false;
+
+function openAssetSyncModal() {
+  document.getElementById('syncLoadingView').style.display = 'block';
+  document.getElementById('syncResultView').style.display = 'none';
+  document.getElementById('assetSyncModal').classList.add('show');
+  
+  // Simulate 1.6 seconds loading
+  setTimeout(() => {
+    document.getElementById('syncLoadingView').style.display = 'none';
+    document.getElementById('syncResultView').style.display = 'block';
+  }, 1600);
+}
+
+function completeAssetSync() {
+  isAssetSynced = true;
+  const syncedTotal = 3722000;
+  const t = computeFinanceTotals();
+  document.getElementById('homeAssetValue').textContent = formatWon(syncedTotal + t.remain);
+  closeSheetBgId({target:{id:'assetSyncModal'}}, 'assetSyncModal');
+}
+
+
+/* Mentor Apply Logic */
+function openMentorApplyModal() {
+  document.getElementById('mentorApplyModal').classList.add('show');
+}
+
+function submitMentorApply() {
+  const job = document.getElementById('mentorJobCategory').value;
+  const company = document.getElementById('mentorCompanyInfo').value.trim();
+  const topic = document.getElementById('mentorTopic').value.trim();
+
+  if(!company || !topic) {
+    alert('경력 연차와 멘토링 주제를 입력해 주세요.');
+    return;
+  }
+
+  alert(`🤝 [${job}] 직무 멘토 신청이 완료되었습니다!\n익산시 청년시청 및 도내 청년센터 멘토링 프로그램(시간당 30,000원 수당) 우선 위촉 명단에 등록되었습니다.`);
+  closeSheetBgId({target:{id:'mentorApplyModal'}}, 'mentorApplyModal');
+}
+
+
+/* Savings Product Comparison Logic */
+function openSavingCompareModal() {
+  const user = getCurrentUser();
+  const recTitle = document.getElementById('recTitle');
+  const recReason = document.getElementById('recReason');
+
+  // Recommendation engine based on user persona
+  if (user.income <= 2500000 || user.asset <= 10000000) {
+    recTitle.textContent = "💡 '청년미래적금'을 우선 추천합니다!";
+    recReason.innerHTML = `현재 사회초년생 단계이시거나 월 소득(${INCOME_BAND_LABEL[user.incomeBand]})을 고려할 때, 5년 장기 유지가 부담스러울 수 있습니다. <b>3년 만기의 청년미래적금</b>을 통해 중도 해지 리스크 없이 1차 목돈(약 1,800만 원)을 유연하게 만드는 것을 권장합니다.`;
+  } else {
+    recTitle.textContent = "🚀 '청년도약계좌'를 우선 추천합니다!";
+    recReason.innerHTML = `안정적인 자산 기반과 소득(${INCOME_BAND_LABEL[user.incomeBand]})이 형성되어 있으므로, <b>5년 만기 청년도약계좌</b>를 통해 정부 기여금과 비과세 혜택을 극대화하여 5,000만 원 자산을 형성하는 것이 가장 유리합니다.`;
+  }
+
+  document.getElementById('savingCompareModal').classList.add('show');
+}
+
+
+
+/* Multilingual (i18n) System: KR, EN, CN */
+let currentLang = 'ko';
+/* currentLang */
+
+const POLICIES_I18N = {
+  'ref-002': {
+    ko: { title: '전주시 금융복지상담소 채무상담', org: '전주시복지재단', benefit: '1:1 무료 채무조정 맞춤 상담', desc: '학자금 대출 및 부채를 지닌 청년들을 위해 1:1 맞춤형 채무상담, 개인회생·파산 등 빠른 부채 탈출 솔루션과 합리적인 상환 플랜을 무료로 지원합니다.' },
+    en: { title: 'Jeonju Financial Welfare Center Debt Counseling', org: 'Jeonju Welfare Foundation', benefit: '1:1 Free Debt Adjustment Counseling', desc: 'Provides 1:1 customized debt counseling, rehabilitation, and bankruptcy solutions for youth with student loans or debts.' },
+    zh: { title: '全州市金融福利咨询所 债务咨询', org: '全州市福利财团', benefit: '1:1 免费债务调整专属咨询', desc: '为负有助学贷款及债务的青年提供1:1专属债务咨询、个人再生·破产等快速摆脱债务方案。' }
+  },
+  'ref-001': {
+    ko: { title: '서민금융진흥원 온라인 재무진단', org: '서민금융진흥원', benefit: '소득·지출·신용 현황 무료 분석', desc: '부채 관리가 시급한 취업 청년의 신용점수 및 소득을 분석하여 효율적인 상환 방안과 공공 서민금융 상품을 매칭해 드립니다.' },
+    en: { title: 'KINFA Online Financial Diagnosis', org: 'KINFA', benefit: 'Free Analysis of Income, Expenses & Credit', desc: 'Analyzes credit score and income for employed youth in urgent need of debt management, matching efficient repayment plans.' },
+    zh: { title: '庶民金融振兴院 线上财务诊断', org: '庶民金融振兴院', benefit: '免费分析收入、支出及信用状况', desc: '分析急需债务管理的就职青年的信用分数及收入，匹配高效还款方案。' }
+  },
+  'policy-jb-double': {
+    ko: { title: '전북청년 함께 두배적금', org: '전북특별자치도', benefit: '만기 시 480만원 + ∝ (원금 2배)', desc: '월 10만원 저축 시 지자체가 10만원을 1:1로 매칭 지원하는 자산형성 적금. 만 18~39세 전북 거주 근로 청년을 대상으로 합니다.' },
+    en: { title: 'Jeonbuk Youth Double Savings', org: 'Jeonbuk State', benefit: '4.8M KRW + Interest at Maturity (2x Principal)', desc: 'Asset-building savings where municipality matches 100k KRW monthly 1:1 for working youth aged 18-39 residing in Jeonbuk.' },
+    zh: { title: '全北青年 Double积立', org: '全北特别自治道', benefit: '到期时 480万韩元 + ∝ (本金2倍)', desc: '每月存入10万韩元时，地方政府1:1匹配支援10万韩元的资产积累积立。面向18~39岁居住在全北的在职青年。' }
+  },
+  'policy-iksan-care': {
+    ko: { title: '초등돌봄 청년선생님 지원사업', org: '기쁨누리청년사업단', benefit: 'N잡 가능 유연 근로 기회 제공', desc: '저녁 시간을 활용하여 본업과 병행할 수 있는 초등 돌봄 학습 지도 교사 활동입니다. 만 20~39세 익산시 청년을 우선 선발합니다.' },
+    en: { title: 'Primary After-school Youth Teacher Program', org: 'Gippumnuri Youth Corps', benefit: 'Flexible Part-time Work Opportunity', desc: 'After-school elementary tutoring activity that can be balanced with a full-time job in the evening. Priority for Iksan youth aged 20-39.' },
+    zh: { title: '小学托管 青年教师支援项目', org: '喜悦享受青年事业团', benefit: '提供可做副业的弹性工作机会', desc: '利用晚间时间与本职并行的小学托管学习指导教师活动。优先选拔20~39岁益山市青年。' }
+  },
+  'policy-tax-001': {
+    ko: { title: '중소기업 취업청년 소득세 감면', org: '국세청', benefit: '소득세 최대 90% (연 200만원 한도) 감면', desc: '중소기업에 취업한 만 15~34세 청년을 대상으로 취업일부터 5년간 발생한 소득세를 최대 90% 감면해주는 정부 절세 혜택입니다.' },
+    en: { title: 'Income Tax Reduction for Youth in SMEs', org: 'National Tax Service', benefit: 'Up to 90% Income Tax Cut (Max 2M KRW/yr)', desc: 'Government tax benefit reducing income tax up to 90% for 5 years from employment for youth aged 15-34 employed in SMEs.' },
+    zh: { title: '中小企业就职青年 所得税减免', org: '国税厅', benefit: '所得税最高减免 90% (每年最高 200万韩元)', desc: '面向就职于中小企业的15~34岁青年，自就业日起5年内产生的所得税最高减免90%的政府节税福利。' }
+  },
+  'policy-002': {
+    ko: { title: '전북 청년 전월세 보증금 이자지원', org: '전북특별자치도', benefit: '전월세 대출 이자 지원', desc: '청년의 독립 및 주거비 부담 완화를 위해 전세 및 월세 보증금 대출 이자의 일부를 지원합니다.' },
+    en: { title: 'Jeonbuk Youth Housing Deposit Loan Interest Support', org: 'Jeonbuk State', benefit: 'Housing Loan Interest Subsidy', desc: 'Supports part of the loan interest for housing deposits to ease the housing cost burden for youth independence.' },
+    zh: { title: '全北青年 租房保证金利息支援', org: '全北特别自治道', benefit: '租房贷款利息支援', desc: '为减轻青年的独立及住房费用负担，支援部分全租及月租保证金贷款利息。' }
+  },
+  'policy-006': {
+    ko: { title: '전북 청년 일자리 도약 장려금', org: '전북청년허브센터', benefit: '근속 시 도약 장려금 현금 지급', desc: '전북 소재 중소기업에 정규직으로 취업하여 장기 근속하는 청년에게 일정 기간마다 장려금을 지원합니다.' },
+    en: { title: 'Jeonbuk Youth Job Leap Allowance', org: 'Jeonbuk Youth Hub Center', benefit: 'Cash Allowance for Long-term Service', desc: 'Provides regular cash incentives to youth employed full-time in Jeonbuk SMEs who remain in service long-term.' },
+    zh: { title: '全北青年 工作跃升奖励金', org: '全北青年枢纽中心', benefit: '长期工作时发放跃升奖励金', desc: '向在全北中小企业正式就职并长期工作的青年，定期发放奖励金。' }
+  },
+  'prod-002': {
+    ko: { title: '청년미래적금', org: '시중 주요 은행 공통', benefit: '3년 만기 고금리 & 자산형성 지원', desc: '만 19~34세 청년을 대상으로 3년 단기/중기 목돈 마련을 돕는 정부 연계 우대금리 적금 상품입니다.' },
+    en: { title: 'Youth Future Savings Account', org: 'Major Commercial Banks', benefit: '3-Year Maturity High-Interest & Govt Support', desc: 'Government-linked preferential interest savings helping youth aged 19-34 build mid-term capital in 3 years.' },
+    zh: { title: '青年未来积立', org: '主要商业银行 公共', benefit: '3年到期高利率 & 资产积累支援', desc: '面向19~34岁青年，协助在3年短·中期内积累一笔资金的政府联动优惠利率积立产品。' }
+  },
+  'prod-001': {
+    ko: { title: '청년도약계좌', org: '시중 11개 은행 공통', benefit: '비과세 혜택 및 정부기여금 최대 지급', desc: '만 19~34세 청년을 대상으로 정부 기여금과 비과세 혜택을 제공하여 목돈 마련을 돕는 5년 만기 정책형 적금입니다.' },
+    en: { title: 'Youth Leap Account', org: '11 Commercial Banks Common', benefit: 'Tax-Free & Max Govt Matching Contribution', desc: '5-year policy savings account providing govt contribution and tax-free benefits for youth aged 19-34.' },
+    zh: { title: '青年跃升账户', org: '11家商业银行 公共', benefit: '免税优惠及最高政府补贴', desc: '面向19~34岁青年，提供政府补贴及免税优惠，协助积累大额资金的5年到期政策型积立。' }
+  },
+  'policy-iksan-saemschool': {
+    ko: { title: '익산 청년시청 청년샘스쿨', org: '익산 청년시청', benefit: '강사료 1시간 30,000원 (최대 6시간)', desc: '자신의 재능과 지식을 나누는 청년샘스쿨 강사로 활동하며 강사료를 지원받고 소득을 창출할 수 있는 프로그램입니다.' },
+    en: { title: 'Iksan Youth City Hall Saem School Instructor', org: 'Iksan Youth City Hall', benefit: '30,000 KRW/hr Instructor Fee (Max 6 hrs)', desc: 'Activity program where youth share talents and knowledge as instructors, receiving stipends to earn extra income.' },
+    zh: { title: '益山青年市厅 青年泉学校 讲师', org: '益山青年市厅', benefit: '讲师费 每小时 30,000韩元 (最高 6小时)', desc: '作为青年泉学校讲师分享自身才华与知识，获得讲师费支援并创造收入的项目。' }
+  },
+  'policy-iksan-welcomebox': {
+    ko: { title: '익산시 전입청년 웰컴박스', org: '익산시', benefit: '전입 축하 웰컴박스 제공', desc: '익산시로 전입한 청년들의 새로운 출발을 응원하고 안정적인 정착을 돕기 위해 전입 축하 웰컴박스를 제공합니다.' },
+    en: { title: 'Iksan Moving-in Youth Welcome Box', org: 'Iksan City', benefit: 'Congratulatory Moving-in Welcome Box', desc: 'Provides a welcome box to cheer for youth moving into Iksan and support their settlement.' },
+    zh: { title: '益山迁入青年 欢迎礼盒', org: '益山市', benefit: '提供迁入祝贺欢迎礼盒', desc: '为应援迁入益山市青年的新开始并协助其稳定定居，提供迁入祝贺欢迎礼盒。' }
+  }
+};
+
+function getLocalizedPolicy(policy) {
+  const pI18n = POLICIES_I18N[policy.id];
+  if(!pI18n) return policy;
+  const langData = pI18n[currentLang] || pI18n['ko'];
+  return {
+    ...policy,
+    title: langData.title || policy.title,
+    org: langData.org || policy.org,
+    benefit: langData.benefit || policy.benefit,
+    description: langData.desc || policy.description
+  };
+}
+
+/* currentLang already declared */
+
+const i18n = {
+  ko: {
+    navHome: "홈", navPolicy: "혜택", navFinance: "재무", navMentor: "직무 멘토", navProfile: "내 정보",
+    resetDiagnosis: "⟲ 조건 다시 진단받기",
+    heroEyebrow: "전북 청년·외국인 근로자 맞춤 플랫폼 | G-Tech (Glocal + 財 + Tech)",
+    heroTitle: "지역을 알면,<br/><span>내 돈이 달라진다.</span>",
+    heroSub: "지테크(G-Tech)는 특정 금융상품 판매 유도나 대출·투자 권유 등 사적 영업을 제공하지 않는 <b>공익형 서비스</b>입니다. 입력하신 거주지, 연령, 근로 상태를 바탕으로 검증된 정부·지자체 및 민간 공공 기관의 정책·금융 서비스를 가장 알맞게 매칭해 드립니다.",
+    hf1Title: "개인화 매칭 엔진", hf1Desc: "조건을 분석하여 참여가능, 제한가능 여부를 즉시 판정합니다.",
+    hf2Title: "공식 기관 다이렉트", hf2Desc: "복잡한 검색 없이 실제 기관 신청 페이지로 바로 안내합니다.",
+    hf3Title: "외국인 근로자 포용", hf3Desc: "체류 자격에 따른 맞춤 혜택과 대안 정책을 함께 제안합니다.",
+    hf4Title: "안전한 로컬 저장", hf4Desc: "개인정보를 서버로 전송하지 않고 브라우저에 안전하게 보관합니다.",
+    obCheckTitle: "내 상황 체크하기", obCheckSub: "간단한 조건 입력으로 숨은 혜택을 찾아보세요.", obStartBtn: "지금 바로 시작하기",
+    obStep1: "STEP 1 · 기본 정보", obResidenceLabel: "거주 지역", obAgeBandLabel: "연령대", obEmploymentLabel: "근로 상태", obCompanyLocalLabel: "근무 회사 위치 (전북 내 시·군)",
+    obStep2: "STEP 2 · 재무 상태", obIncomeBandLabel: "월 평균 소득", obAssetBandLabel: "보유 자산 규모 (예적금 등)", obDebtLabel: "현재 상환 중인 대출·부채 (학자금 등)",
+    obStep3: "STEP 3 · 국적 및 기타", obNationalityLabel: "국적", obVisaLabel: "체류자격 (비자)",
+    obNextBtn: "다음으로", obResultBtn: "내 맞춤 결과 확인하기", obResultTitle: "진단이 완료되었습니다", obHomeBtn: "지테크 홈으로 이동",
+    homeAllPolicyBtn: "전체 혜택 보기", homeGuideTag: "💡 지테크(G-Tech) 가이드", homeGuideTitle: "지역기반 재테크, 우리가 놓쳤던 지자체 알짜 혜택들",
+    homeGuideDesc: "도내 중소·중견기업에 다니는 청년들을 위한 숨겨진 돈 찾기! 전북 14개 시·군의 청년 정책, 자산형성 지원금, 단기 일자리까지. 입력하신 조건에 맞는 최적의 재테크 기회를 정리해 드립니다.",
+    homeAssetLabel: "현재 예상 자산 잔액", homeMonthLabel: "이번 달 기준", homeIncomeLabel: "월 수입", homeSpendingLabel: "월 지출",
+    homeEligibleScore: "바로 참여 가능한 혜택 🟢", homeConditionalScore: "조건 확인 필요 혜택 🟡",
+    homePolicyTitle: "나에게 꼭 맞는 정책", homeSpendingTitle: "이번 달 지출 요약", homeProductTitle: "참고할 만한 금융 상품", homeMoreBtn: "더보기",
+    donutTotalLabel: "총 지출", homeCompareBtn: "📊 도약계좌 vs 미래적금 비교", homeCompareDiagBtn: "💡 청년도약계좌 vs 청년미래적금, 나에게 맞는 계좌는? (1:1 진단)",
+    policyHeadTitle: "맞춤 혜택 라운지", policyHeadSub: "지역 및 조건에 맞는 정책과 기관 서비스를 찾아 공식 신청 페이지로 안전하게 연결합니다.",
+    policyResidenceFilter: "거주 지역 기준", policyCatFilter: "카테고리 필터", catAll: "🗂 전체 보기", catFin: "💰 금융 지원", catHouse: "🏛 주거·독립", catLive: "🌿 생활·복지", policyOnlyEligible: "내가 참여 가능한 것만",
+    sheetTitle: "조건 안내", sheetConfirmBtn: "내용을 확인했습니다",
+    finHeadTitle: "나의 재무 현황", finHeadSub: "이번 달 현금 흐름을 한눈에 파악하고, 필요한 공공 상담 서비스와 연계해보세요.",
+    financeSyncBtn: "🔗 자산 연동하기", finIncomeLabel: "총 수입", finFixedLabel: "고정 지출 (주거비 등)", finVarLabel: "변동 지출 (생활비)", finRemainLabel: "여유 자금",
+    finRecentExpTitle: "최근 지출 내역", financeRefreshBtn: "⟲ 연동 지출 갱신", finCreditCardTitle: "💳 부채 및 신용관리 무료 지원",
+    finCreditCardDesc: "학자금 대출이나 채무 부담을 안고 계신가요? 지자체와 공공기관에서 제공하는 안전하고 무료인 1:1 재무 상담을 받아보세요.",
+    foreignRemitTitle: "💱 외국인 근로자 해외송금 계산기", foreignRemitAmountLabel: "이번 달 송금 예정액", remitCurrentFeeLabel: "일반 수수료 예시", remitDiscountFeeLabel: "핀테크 우대 적용 시", remitSavingsLabel: "예상 절감액",
+    mentorHeadTitle: "직무 기반 멘토링 라운지", mentorHeadSub: "대기업 타이틀이 아닌 진짜 실무 역량! 도내 중소·중견기업 재직자의 경험을 나누고 시간당 30,000원의 부수입을 얻으세요.",
+    mentorGuideTag: "💡 지테크 직무 멘토링이란?", mentorGuideTitle: "스펙 중심 멘토링에서 '진짜 직무 노하우' 중심으로",
+    mentorGuideDesc: "전북 권내 중소·중견기업 재직 청년들의 실무 역량은 지역 취준생들에게 가장 현실적이고 유용한 자산입니다.<br/>지자체 청년센터(익산 청년시청 청년샘스쿨 등)와 연계하여 <b>시간당 30,000원(최대 6시간)의 강사료/자문비</b>를 지급받으며 부수입을 올릴 수 있습니다.",
+    mentorRecruitTitle: "현재 모집 중인 직무 멘토링 영역", mentorStipendBadge: "🟢 지자체 강사료 지원",
+    mCard1Title: "💻 IT·개발 / 데이터", mCard1Desc: "도내 제조업/IT기업 실무 기획 및 개발 프로젝트 노하우 공유", mCard1Stipend: "지원금: 시간당 30,000원",
+    mCard2Title: "⚙️ 생산·품질·바이오", mCard2Desc: "익산/군산 산단 기업 공정 관리 및 품질 인증 실무 가이드", mCard2Stipend: "지원금: 시간당 30,000원",
+    mCard3Title: "📈 마케팅·경영지원", mCard3Desc: "지역 기반 유통, B2B 영업, 회무 및 인사실무 팁 공유", mCard3Stipend: "지원금: 시간당 30,000원",
+    mCard4Title: "🎨 디자인·콘텐츠", mCard4Desc: "실무 툴 활용 및 외주/자사 브랜드 디자인 프로세스 축적 노하우", mCard4Stipend: "지원금: 시간당 30,000원",
+    mentorApplyBtn: "🤝 직무 멘토 등록 신청하기 (부수입 신청)", mentorSideTitle: "🏛 연계 지자체 지원 프로그램", mSideOrg: "익산 청년시청", mSideLimit: "(익산 거주자 한함)", mSideProgramTitle: "익산 청년샘스쿨 강사 매칭", mSideProgramDesc: "재직 청년의 실무 지식을 강의/자문 형태로 제공 시 시간당 3만 원(최대 6시간) 수당 지급", mSideLink: "공식 공고 보기 →", mSideNote: "* 지테크 플랫폼에 등록된 멘토 정보는 전북 14개 시·군 청년센터의 강사 인력풀로 연계되며, 멘토링 지원 사업이 있는 타 지자체의 경우 순차적으로 연동 및 확장될 예정입니다.",
+    mModalTitle: "🤝 직무 멘토 신청하기", mModalSub: "입력하신 직무 정보는 도내 청년센터 멘토링 프로그램 지원금 매칭에 활용됩니다.", mModalJobLabel: "담당 직무 분야", mModalCompanyLabel: "현재 재직 회사 및 경력 연차", mModalTopicLabel: "멘토링 주제 (주요 지식 나눔 내용)", mModalSubmitBtn: "신청 완료 (시간당 3만원 지원금 연계)",
+    profileHeadTitle: "내 정보 설정", profileHeadSub: "입력하신 프로필 정보를 바탕으로 맞춤 혜택을 찾아드립니다.", profileCondTitle: "매칭 기본 조건", profileKResidence: "거주지", profileKEmp: "근로 상태", profileKComp: "소속 기업 소재", profileKIncome: "월 평균 소득", profileKAsset: "보유 자산", profileKNat: "국적", profileKVisa: "체류자격(비자)", profileEditBtn: "정보 수정하기",
+    pEditTitle: "정보 수정", pEditSaveBtn: "변경 내용 저장",
+    compareModalTitle: "📊 청년 정책 적금 1:1 맞춤 비교", compareAiTag: "AI 맞춤 진단", compareModalSub: "사회초년생이 가장 많이 헷갈려하는 두 핵심 적금 상품을 완벽 분석해 드립니다.", compareRecTag: "🎯 나은님 맞춤 추천 결론", tblCol1: "비교 항목", tblCol2: "청년미래적금", tblCol3: "청년도약계좌", tblRow1Name: "만기 기간", tblRow1Val1: "3년 (단·중기)", tblRow1Val2: "5년 (장기)", tblRow2Name: "월 적립 한도", tblRow2Val1: "최대 50만 원", tblRow2Val2: "최대 70만 원", tblRow3Name: "핵심 혜택", tblRow3Val1: "정부 우대금리 + 높은 완성률", tblRow3Val2: "정부 기여금(최대 6%) + 비과세", tblRow4Name: "목돈 목표금액", tblRow4Val1: "약 1,800만 원 + 이자", tblRow4Val2: "최대 5,000만 원 형성", tblRow5Name: "추천 대상", tblRow5Val1: "• 5년 유지가 부담스러운 사회초년생<br/>• 3년 내 결혼/이주 계획이 있는 경우", tblRow5Val2: "• 5년 이상 장기 근속 예정 청년<br/>• 최대 정부 지원금을 노리는 경우", compareConfirmBtn: "확인했습니다",
+    syncModalTitle: "⚡ 실시간 자산 연동 (시뮬레이션)", syncModalSub: "마이데이터 연계를 통해 내 예금, 증권, 페이 자산을 안전하게 조회합니다.", syncLoadingText: "실시간 자산 연동 중...", syncLoadingSub: "전북은행, KB증권, 네이버페이, 쿠팡페이망 연결 중", syncTotalLabel: "연동된 자산 총합", syncBank1: "🏦 전북은행 예금", syncSec1: "📈 KB 증권", syncPay1: "💚 네이버 페이", syncPay2: "🔴 쿠팡 페이", syncConfirmBtn: "확인 (내 자산에 반영 완료)",
+    chatbotFab: "지테크(G-Tech) AI 챗봇", chatbotTitle: "🤖 지테크 맞춤 추천 AI", chatbotSub: "사용자 조건 기반 1:1 맞춤 안내", closeWin: "창 닫기", footerText: "지테크(G-Tech)는 전북 청년 및 외국인 근로자를 위한 맞춤형 정책·재테크 연계 데모 플랫폼입니다."
+  },
+  en: {
+    navHome: "Home", navPolicy: "Benefits", navFinance: "Finance", navMentor: "Mentors", navProfile: "My Info",
+    resetDiagnosis: "⟲ Reset Assessment",
+    heroEyebrow: "Jeonbuk Youth & Foreign Workers Platform | G-Tech (Glocal + 財 + Tech)",
+    heroTitle: "Know your region,<br/><span>Change your wealth.</span>",
+    heroSub: "G-Tech is a <b>public interest service</b> that does not push commercial financial products, loans, or investments. Based on your residence, age, and employment status, we accurately match verified government and municipal policy services for you.",
+    hf1Title: "Personalized Matching Engine", hf1Desc: "Instantly analyzes your status to determine eligibility.",
+    hf2Title: "Direct Official Links", hf2Desc: "Connects directly to official application portals without complex searches.",
+    hf3Title: "Inclusion of Foreign Workers", hf3Desc: "Offers customized benefits and alternative options based on visa status.",
+    hf4Title: "Secure Local Storage", hf4Desc: "Stores personal data safely in browser without sending to servers.",
+    obCheckTitle: "Check Your Status", obCheckSub: "Find hidden benefits with a quick condition check.", obStartBtn: "Get Started Now",
+    obStep1: "STEP 1 · Basic Info", obResidenceLabel: "Residence Region", obAgeBandLabel: "Age Band", obEmploymentLabel: "Employment Status", obCompanyLocalLabel: "Company Location (Jeonbuk)",
+    obStep2: "STEP 2 · Financial Info", obIncomeBandLabel: "Monthly Income", obAssetBandLabel: "Total Asset Scale", obDebtLabel: "Current Loans/Debts",
+    obStep3: "STEP 3 · Nationality", obNationalityLabel: "Nationality", obVisaLabel: "Visa Type (Status)",
+    obNextBtn: "Next Step", obResultBtn: "View Matched Results", obResultTitle: "Assessment Completed", obHomeBtn: "Go to G-Tech Home",
+    homeAllPolicyBtn: "View All Benefits", homeGuideTag: "💡 G-Tech Guide", homeGuideTitle: "Local Wealth Tech: Uncover Hidden Municipal Benefits",
+    homeGuideDesc: "Discover hidden funds for youth working in Jeonbuk SMEs! We organize youth policies, asset-building grants, and part-time opportunities across 14 cities/counties.",
+    homeAssetLabel: "Estimated Total Assets", homeMonthLabel: "As of this month", homeIncomeLabel: "Monthly Income", homeSpendingLabel: "Monthly Spending",
+    homeEligibleScore: "Immediately Eligible 🟢", homeConditionalScore: "Needs Verification 🟡",
+    homePolicyTitle: "Top Matched Policies for You", homeSpendingTitle: "This Month's Spending Summary", homeProductTitle: "Reference Financial Products", homeMoreBtn: "More",
+    donutTotalLabel: "Total Expense", homeCompareBtn: "📊 Compare Savings Accounts", homeCompareDiagBtn: "💡 Youth Leap vs Future Savings: Which is best for me? (1:1 Diagnosis)",
+    policyHeadTitle: "Matched Benefits Lounge", policyHeadSub: "Find policies that fit your condition and connect safely to official registration portals.",
+    policyResidenceFilter: "Filter by Residence", policyCatFilter: "Category Filter", catAll: "🗂 All", catFin: "💰 Financial", catHouse: "🏛 Housing", catLive: "🌿 Welfare", policyOnlyEligible: "Show Only Eligible",
+    sheetTitle: "Condition Guide", sheetConfirmBtn: "Understood",
+    finHeadTitle: "My Financial Overview", finHeadSub: "Track cash flows and connect to free public credit/debt counseling.",
+    financeSyncBtn: "🔗 Sync Assets", finIncomeLabel: "Total Income", finFixedLabel: "Fixed Costs (Rent, etc.)", finVarLabel: "Variable Expenses", finRemainLabel: "Disposable Capital",
+    finRecentExpTitle: "Recent Expenses", financeRefreshBtn: "⟲ Refresh Expenses", finCreditCardTitle: "💳 Free Debt & Credit Management Support",
+    finCreditCardDesc: "Struggling with student loans or debts? Access free 1:1 financial counseling provided by public foundations.",
+    foreignRemitTitle: "💱 Foreign Worker Remittance Calculator", foreignRemitAmountLabel: "Monthly Remittance Amount", remitCurrentFeeLabel: "Standard Fee Example", remitDiscountFeeLabel: "With Fintech Discount", remitSavingsLabel: "Estimated Savings",
+    mentorHeadTitle: "Job-Based Mentoring Lounge", mentorHeadSub: "Share your practical SME work experience and earn 30,000 KRW/hr side income!",
+    mentorGuideTag: "💡 What is G-Tech Mentoring?", mentorGuideTitle: "Shift from Resume Specs to Real Field Expertise",
+    mentorGuideDesc: "Practical work experience from SME employees in Jeonbuk is the most realistic asset for local job seekers. Get matched with youth centers and earn <b>30,000 KRW/hr (Up to 6 hrs)</b> in stipends.",
+    mentorRecruitTitle: "Currently Recruiting Mentoring Fields", mentorStipendBadge: "🟢 Govt Stipend Supported",
+    mCard1Title: "💻 IT / Software / Data", mCard1Desc: "Share project management and software development know-how in local companies", mCard1Stipend: "Stipend: 30,000 KRW/hr",
+    mCard2Title: "⚙️ Production / Quality / Bio", mCard2Desc: "Process control and quality certification guide for industrial complex firms", mCard2Stipend: "Stipend: 30,000 KRW/hr",
+    mCard3Title: "📈 Marketing / Mgmt", mCard3Desc: "Tips on B2B sales, HR, and regional distribution channels", mCard3Stipend: "Stipend: 30,000 KRW/hr",
+    mCard4Title: "🎨 Design / Content", mCard4Desc: "Design tool practical skills and branding process expertise", mCard4Stipend: "Stipend: 30,000 KRW/hr",
+    mentorApplyBtn: "🤝 Apply as Job Mentor (Earn Side Income)", mentorSideTitle: "🏛 Partner Municipal Programs", mSideOrg: "Iksan Youth City Hall", mSideLimit: "(Iksan Residents Only)", mSideProgramTitle: "Iksan Saem School Instructor Match", mSideProgramDesc: "Earn 30,000 KRW/hr stipend (max 6 hrs) by sharing practical knowledge via lectures/consulting.", mSideLink: "View Official Notice →", mSideNote: "* Registered mentor profiles are linked to 14 Jeonbuk youth center pools and will sequentially expand to other cities.",
+    mModalTitle: "🤝 Apply for Job Mentor", mModalSub: "Your job info will be matched with municipal youth mentoring stipend programs.", mModalJobLabel: "Job Category", mModalCompanyLabel: "Company & Years of Experience", mModalTopicLabel: "Mentoring Topic", mModalSubmitBtn: "Complete Application (30,000 KRW/hr Stipend Linked)",
+    profileHeadTitle: "My Profile Settings", profileHeadSub: "We match tailored benefits based on your saved profile info.", profileCondTitle: "Matching Criteria", profileKResidence: "Residence", profileKEmp: "Employment Status", profileKComp: "Company Location", profileKIncome: "Monthly Income", profileKAsset: "Current Assets", profileKNat: "Nationality", profileKVisa: "Visa Status", profileEditBtn: "Edit Profile",
+    pEditTitle: "Edit Profile", pEditSaveBtn: "Save Changes",
+    compareModalTitle: "📊 Youth Policy Savings 1:1 Comparison", compareAiTag: "AI Diagnosis", compareModalSub: "Comprehensive analysis of the two most popular youth policy savings accounts.", compareRecTag: "🎯 Custom Recommendation Result", tblCol1: "Comparison Item", tblCol2: "Youth Future Savings", tblCol3: "Youth Leap Account", tblRow1Name: "Maturity Period", tblRow1Val1: "3 Years (Mid-term)", tblRow1Val2: "5 Years (Long-term)", tblRow2Name: "Monthly Limit", tblRow2Val1: "Max 500k KRW", tblRow2Val2: "Max 700k KRW", tblRow3Name: "Key Benefit", tblRow3Val1: "Govt Interest Rate + High Completion Rate", tblRow3Val2: "Govt Matching Grant (Max 6%) + Tax-Free", tblRow4Name: "Target Capital", tblRow4Val1: "~18M KRW + Interest", tblRow4Val2: "Up to 50M KRW", tblRow5Name: "Recommended For", tblRow5Val1: "• Early career workers finding 5 years burdensome<br/>• Planning marriage/relocation within 3 yrs", tblRow5Val2: "• Workers planning 5+ years of continuous service<br/>• Wanting to maximize government matching grants", compareConfirmBtn: "Understood",
+    syncModalTitle: "⚡ Real-Time Asset Sync (Simulation)", syncModalSub: "Securely query savings, stocks, and pay accounts via MyData integration.", syncLoadingText: "Syncing Assets in Real-Time...", syncLoadingSub: "Connecting to JB Bank, KB Securities, Naver Pay, Coupang Pay...", syncTotalLabel: "Total Synced Assets", syncBank1: "🏦 JB Bank Savings", syncSec1: "📈 KB Securities", syncPay1: "💚 Naver Pay", syncPay2: "🔴 Coupang Pay", syncConfirmBtn: "Confirm & Update Assets",
+    chatbotFab: "G-Tech AI Chatbot", chatbotTitle: "🤖 G-Tech Recommendation AI", chatbotSub: "1:1 Guide Based on Your Status", closeWin: "Close Window", footerText: "G-Tech is a policy and financial linkage demo platform for Jeonbuk youth and foreign workers."
+  },
+  zh: {
+    navHome: "首页", navPolicy: "福利政策", navFinance: "财务", navMentor: "职场导师", navProfile: "个人信息",
+    resetDiagnosis: "⟲ 重新测评",
+    heroEyebrow: "全北青年·外籍劳动者专属平台 | G-Tech (Glocal + 財 + Tech)",
+    heroTitle: "了解地方政策,<br/><span>改变您的财富。</span>",
+    heroSub: "G-Tech 是一项<b>公益性服务</b>，绝不推销商业金融产品或贷款投资。根据您输入的居住地、年龄和就职状态，为您精准匹配经过验证的政府及地方团体政策福利。",
+    hf1Title: "个性化匹配引擎", hf1Desc: "分析条件，立即判定是否可以参与。",
+    hf2Title: "官方机构直连", hf2Desc: "无需繁琐搜索，直接引导至官方申请页面。",
+    hf3Title: "包含外籍劳动者", hf3Desc: "根据签证居留资格，提供专属福利及替代方案。",
+    hf4Title: "安全本地存储", hf4Desc: "个人信息不传输至服务器，安全保存在浏览器中。",
+    obCheckTitle: "检查我的现状", obCheckSub: "通过简单条件输入，查找隐藏的政策福利。", obStartBtn: "立即开始",
+    obStep1: "STEP 1 · 基本信息", obResidenceLabel: "居住地区", obAgeBandLabel: "年龄段", obEmploymentLabel: "就业状态", obCompanyLocalLabel: "工作单位位置 (全北)",
+    obStep2: "STEP 2 · 财务状况", obIncomeBandLabel: "月平均收入", obAssetBandLabel: "资产规模", obDebtLabel: "目前偿还中的贷款",
+    obStep3: "STEP 3 · 国籍", obNationalityLabel: "国籍", obVisaLabel: "居留资格 (签证)",
+    obNextBtn: "下一步", obResultBtn: "查看匹配结果", obResultTitle: "测评已完成", obHomeBtn: "前往 G-Tech 首页",
+    homeAllPolicyBtn: "查看全部福利", homeGuideTag: "💡 G-Tech 指南", homeGuideTitle: "地方财富科技：查找被忽视的政府福利",
+    homeGuideDesc: "为在全北中小企业工作的青年寻找隐藏财富！整理全北14个市·郡的青年政策、资产积累补贴及短期工作机会。",
+    homeAssetLabel: "当前预计总资产", homeMonthLabel: "本月基准", homeIncomeLabel: "月收入", homeSpendingLabel: "月支出",
+    homeEligibleScore: "可直接参与福利 🟢", homeConditionalScore: "需确认条件福利 🟡",
+    homePolicyTitle: "为您精选的政策", homeSpendingTitle: "本月支出汇总", homeProductTitle: "参考金融产品", homeMoreBtn: "更多",
+    donutTotalLabel: "总支出", homeCompareBtn: "📊 跃升账户 vs 未来积立 对比", homeCompareDiagBtn: "💡 青年跃升账户 vs 青年未来积立，哪款最适合我？ (1:1 诊断)",
+    policyHeadTitle: "专属福利大厅", policyHeadSub: "查找符合您条件的政策，安全连接至官方申请页面。",
+    policyResidenceFilter: "居住地筛选", policyCatFilter: "分类筛选", catAll: "🗂 全部", catFin: "💰 金融支援", catHouse: "🏛 住房·独立", catLive: "🌿 生活·福利", policyOnlyEligible: "仅看可参与项目",
+    sheetTitle: "条件指南", sheetConfirmBtn: "已确认内容",
+    finHeadTitle: "我的财务现状", finHeadSub: "一目了然掌握本月现金流，连接免费公共债务/信用咨询。",
+    financeSyncBtn: "🔗 联动资产", finIncomeLabel: "总收入", finFixedLabel: "固定支出 (房租等)", finVarLabel: "变动支出 (生活费)", finRemainLabel: "充裕资金",
+    finRecentExpTitle: "最近支出明细", financeRefreshBtn: "⟲ 刷新支出", finCreditCardTitle: "💳 免费债务及信用管理支援",
+    finCreditCardDesc: "背负助学贷款或债务负担？接受公共财团提供的免费 1:1 财务咨询。",
+    foreignRemitTitle: "💱 外籍劳动者海外汇款计算器", foreignRemitAmountLabel: "本月预计汇款额", remitCurrentFeeLabel: "一般手续费示例", remitDiscountFeeLabel: "金融科技优惠价", remitSavingsLabel: "预计节省额",
+    mentorHeadTitle: "职场导师大厅", mentorHeadSub: "分享全北中小企业在职青年的实战经验，赚取每小时 30,000韩元 的副业收入！",
+    mentorGuideTag: "💡 什么是 G-Tech 职场导师？", mentorGuideTitle: "从履历履历转向'真正职场经验'为中心",
+    mentorGuideDesc: "全北中小企业在职青年的实战能力是求职者最现实有用的资产。对接地方青年中心，赚取<b>每小时 30,000韩元 (最高 6小时)</b> 的讲师费。",
+    mentorRecruitTitle: "目前招募中的导师领域", mentorStipendBadge: "🟢 地方政府提供讲师费",
+    mCard1Title: "💻 IT / 软件 / 数据", mCard1Desc: "分享本地企业项目策划及软件开发实战经验", mCard1Stipend: "补贴: 每小时 30,000韩元",
+    mCard2Title: "⚙️ 生产 / 质量 / 生物", mCard2Desc: "工业园区企业工艺管理及质量认证实战指南", mCard2Stipend: "补贴: 每小时 30,000韩元",
+    mCard3Title: "📈 营销 / 经营支援", mCard3Desc: "本地渠道、B2B销售及人事行政实战技巧", mCard3Stipend: "补贴: 每小时 30,000韩元",
+    mCard4Title: "🎨 设计 / 内容", mCard4Desc: "实务工具运用及品牌设计流程经验", mCard4Stipend: "补贴: 每小时 30,000韩元",
+    mentorApplyBtn: "🤝 申请成为职场导师 (申请副业)", mentorSideTitle: "🏛 对接地方政府支援项目", mSideOrg: "益山青年市厅", mSideLimit: "(仅限益山居民)", mSideProgramTitle: "益山青年泉学校讲师匹配", mSideProgramDesc: "以讲座/咨询形式分享实务知识，每小时提供3万韩元(最高6小时)补贴。", mSideLink: "查看官方公告 →", mSideNote: "* 注册的导师信息将连接至全北14个市·郡青年中心人才库，并将逐步扩展至其他城市。",
+    mModalTitle: "🤝 申请成为职场导师", mModalSub: "您输入的职业信息将用于匹配地方青年中心导师补贴项目。", mModalJobLabel: "负责领域", mModalCompanyLabel: "当前就职公司及工作年限", mModalTopicLabel: "导师分享主题", mModalSubmitBtn: "完成申请 (绑定每小时3万韩元补贴)",
+    profileHeadTitle: "个人信息设置", profileHeadSub: "根据您保存的个人资料匹配专属福利。", profileCondTitle: "匹配基本条件", profileKResidence: "居住地", profileKEmp: "就职状态", profileKComp: "公司位置", profileKIncome: "月平均收入", profileKAsset: "资产规模", profileKNat: "国籍", profileKVisa: "签证资格", profileEditBtn: "修改信息",
+    pEditTitle: "修改信息", pEditSaveBtn: "保存修改内容",
+    compareModalTitle: "📊 青年政策积立 1:1 专属对比", compareAiTag: "AI 专属诊断", compareModalSub: "深度对比分析初入职场青年最易混淆的两款核心积立产品。", compareRecTag: "🎯 专属推荐结论", tblCol1: "对比项目", tblCol2: "青年未来积立", tblCol3: "青年跃升账户", tblRow1Name: "到期期限", tblRow1Val1: "3年 (短·中期)", tblRow1Val2: "5年 (长期)", tblRow2Name: "月存款上限", tblRow2Val1: "最高 50万韩元", tblRow2Val2: "最高 70万韩元", tblRow3Name: "核心福利", tblRow3Val1: "政府优惠利率 + 高完成率", tblRow3Val2: "政府补贴(最高6%) + 免税", tblRow4Name: "目标资产额", tblRow4Val1: "约 1,800万韩元 + 利息", tblRow4Val2: "最高积累 5,000万韩元", tblRow5Name: "推荐对象", tblRow5Val1: "• 认为5年期限有负担的初入职场青年<br/>• 计划3年内结婚/搬迁者", tblRow5Val2: "• 计划长期工作5年以上的青年<br/>• 想要最大化获得政府补贴者", compareConfirmBtn: "已确认",
+    syncModalTitle: "⚡ 实时资产联动 (模拟)", syncModalSub: "通过 MyData 安全查询您的存款、证券及支付账户资产。", syncLoadingText: "正在实时联动资产...", syncLoadingSub: "正在连接全北银行、KB证券、Naver Pay、Coupang Pay...", syncTotalLabel: "已联动资产总额", syncBank1: "🏦 全北银行 存款", syncSec1: "📈 KB 证券", syncPay1: "💚 Naver Pay", syncPay2: "🔴 Coupang Pay", syncConfirmBtn: "确认并更新资产",
+    chatbotFab: "G-Tech AI 机器人", chatbotTitle: "🤖 G-Tech 精准推荐 AI", chatbotSub: "基于用户条件的 1:1 专属指南", closeWin: "关闭窗口", footerText: "G-Tech 是一项面向全北青年及外籍劳动者的政策与金融对接演示平台。"
+  }
+};
+
+
+function setLanguage(lang) {
+  currentLang = lang;
+  updateCitySelects();
+  applyProfileUI();
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang || (lang === 'zh' && btn.textContent === 'CN') || (lang === 'ko' && btn.textContent === 'KR') || (lang === 'en' && btn.textContent === 'EN'));
+  });
+
+  const t = i18n[lang] || i18n['ko'];
+
+  // Update Navigation Bar
+  const navItems = document.querySelectorAll('.mainnav .navitem .txt');
+  if(navItems.length >= 5) {
+    navItems[0].textContent = t.navHome;
+    navItems[1].textContent = t.navPolicy;
+    navItems[2].textContent = t.navFinance;
+    navItems[3].textContent = t.navMentor;
+    navItems[4].textContent = t.navProfile;
+  }
+
+  // Update Elements with data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if(t[key]) {
+      el.innerHTML = t[key];
+    }
+  });
+
+  // Re-render current active screen to update dynamic strings
+  const activeScreen = document.querySelector('.screen.active');
+  if(activeScreen) {
+    const screenId = activeScreen.id.replace('screen-', '');
+    if(screenId === 'home') { renderHomePolicyMini(); renderFinance(); }
+    if(screenId === 'policy') { renderPolicyScreen(); }
+    if(screenId === 'finance') { renderFinance(); }
+    if(screenId === 'profile') { applyProfileUI(); }
+  }
+
+  // Update Chatbot FAB
+  const fab = document.querySelector('.chatbot-fab');
+  if(fab) fab.innerHTML = `<span>💬</span> ${t.chatbotFab}`;
+}
+
+init();
+
+/* Chatbot Logic */
+let isChatOpen = false;
+
+function toggleChatbot() {
+  const modal = document.getElementById('chatModal');
+  isChatOpen = !isChatOpen;
+  modal.classList.toggle('show', isChatOpen);
+  
+  if (isChatOpen) {
+    const user = getCurrentUser();
+    document.getElementById('chatUserContext').textContent = `📍 ${user.residence} · ${AGE_BAND_LABEL[user.ageBand]} · ${EMPLOYMENT_LABEL[user.employment]}`;
+    if (document.getElementById('chatBody').children.length === 0) {
+      initChatbotGreeting();
+    }
+    document.getElementById('chatInput').focus();
+  }
+}
+
+function initChatbotGreeting() {
+  const user = getCurrentUser();
+  const userName = user.nationality === 'foreigner' ? 'Mina' : '나은';
+  
+  const greeting = `안녕하세요, <b>${userName}님</b>! 👋<br/>지역기반 재테크 플랫폼 <b>지테크(G-Tech) AI 챗봇</b>입니다.<br/><br/>현재 <b>${user.residence}</b> 거주 및 <b>${EMPLOYMENT_LABEL[user.employment]}</b> 조건에 맞춰 숨겨진 지원금과 알짜 정책을 찾아드릴게요.<br/><br/>아래 추천 키워드를 클릭하거나 궁금한 점을 편하게 질문해 보세요!`;
+  
+  addBotMessage(greeting);
+  
+  // Add Quick Suggestion Chips
+  const chipsHtml = `
+    <div class="chat-quick-chips">
+      <div class="chat-qchip" onclick="quickAsk('자산형성')">💰 내 조건 맞춤 적금/지원금</div>
+      <div class="chat-qchip" onclick="quickAsk('부수입')">⚡ 퇴근 후 N잡/부수입 기회</div>
+      <div class="chat-qchip" onclick="quickAsk('주거')">🏛 주거/월세/보증금 지원</div>
+      <div class="chat-qchip" onclick="quickAsk('${user.residence}')">📍 ${user.residence} 특화 혜택</div>
+      <div class="chat-qchip" onclick="quickAsk('전체')">🔍 바로 참여 가능한 전체 혜택</div>
+    </div>
+  `;
+  appendRawToChat(chipsHtml);
+}
+
+function quickAsk(keyword) {
+  addUserMessage(getChipLabel(keyword));
+  processBotResponse(keyword);
+}
+
+function getChipLabel(keyword) {
+  if (keyword === '자산형성') return '💰 내 조건에 맞는 자산형성 적금 및 지원금이 궁금해요.';
+  if (keyword === '부수입') return '⚡ 퇴근 후나 주말에 할 수 있는 N잡/부수입 기회가 있나요?';
+  if (keyword === '주거') return '🏛 주거비나 월세, 임차보증금 이자 지원 정책 알려주세요.';
+  if (keyword === '전체') return '🔍 지금 내 상황에서 바로 참여할 수 있는 전체 정책 보여줘!';
+  return `📍 ${keyword} 지역 특화 혜택 알려줘!`;
+}
+
+
+function handleChatKey(e) {
+  if (e.key === 'Enter') {
+    sendChatMessage();
+  }
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  addUserMessage(text);
+  input.value = '';
+  processBotResponse(text);
+}
+
+document.getElementById('chatInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    sendChatMessage();
+  }
+});
+
+function addUserMessage(msg) {
+  const chatBody = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = 'chat-msg user';
+  div.innerHTML = `<div class="chat-bubble">${escapeHtml(msg)}</div>`;
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function addBotMessage(htmlContent) {
+  const chatBody = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.innerHTML = `<div class="chat-bubble">${htmlContent}</div>`;
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function appendRawToChat(htmlContent) {
+  const chatBody = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.innerHTML = htmlContent;
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function processBotResponse(query) {
+  const user = getCurrentUser();
+  const q = query.toLowerCase();
+  
+  let matched = [];
+  let responseIntro = "";
+
+  if (q.includes('자산') || q.includes('적금') || q.includes('돈') || q.includes('지원금') || q.includes('두배')) {
+    responseIntro = `💰 <b>${user.residence} ${AGE_BAND_LABEL[user.ageBand]} 청년</b>을 위한 자산형성 및 지원금 정책입니다:`;
+    matched = policies.filter(p => p.category === 'finance' || p.title.includes('적금') || p.title.includes('장려금') || p.title.includes('감면'));
+  } 
+  else if (q.includes('부수입') || q.includes('n잡') || q.includes('강사') || q.includes('샘스쿨') || q.includes('돌봄') || q.includes('알바') || q.includes('일자리')) {
+    responseIntro = `⚡ 본업과 병행 가능한 <b>N잡 및 부수입(강사/돌봄) 기회</b>입니다:`;
+    matched = policies.filter(p => p.finType === '일자리' || p.title.includes('샘스쿨') || p.title.includes('돌봄') || p.title.includes('선생님'));
+  } 
+  else if (q.includes('주거') || q.includes('월세') || q.includes('보증금') || q.includes('집') || q.includes('이주') || q.includes('전입') || q.includes('웰컴')) {
+    responseIntro = `🏛 <b>주거 지원 및 정착 혜택</b> 정보입니다:`;
+    matched = policies.filter(p => p.category === 'housing' || p.title.includes('월세') || p.title.includes('보증금') || p.title.includes('웰컴박스'));
+  } 
+  else if (q.includes('익산') || q.includes('전주') || q.includes('군산') || q.includes('완주')) {
+    const regName = q.includes('익산') ? '익산시' : q.includes('전주') ? '전주시' : q.includes('군산') ? '군산시' : '완주군';
+    responseIntro = `📍 <b>${regName} 특화 정책 및 기관 서비스</b> 목록입니다:`;
+    matched = policies.filter(p => {
+      const scope = p.eligibility.regionScope;
+      return Array.isArray(scope) && scope.includes(regName);
+    });
+  } 
+  else {
+    responseIntro = `🔍 <b>${user.residence} / ${EMPLOYMENT_LABEL[user.employment]}</b> 기준 참여 가능한 추천 정책 목록입니다:`;
+    matched = policies.filter(p => policyVisibleForUser(p, user));
+  }
+
+  // Filter matched policies using eligibility engine
+  const results = matched.map(p => ({ policy: p, result: getPolicyEligibility(user, p) }))
+                         .filter(r => r.result.status !== 'restricted' || matched.length <= 3);
+
+  if (results.length === 0) {
+    addBotMessage(`죄송합니다, 입력하신 조건에 들어맞는 정책을 찾지 못했습니다. 😢<br/>다른 키워드로 검색해 보시거나 조건(거주지 등)을 변경해 보세요.`);
+    return;
+  }
+
+  let cardsHtml = responseIntro + '<br/>';
+  results.forEach(({ policy, result }) => {
+    const badge = result.status === 'eligible' ? '🟢 바로 참여' : result.status === 'conditional' ? '🟡 조건 확인' : '💡 참고';
+    const link = policy.url ? `<a class="a" href="${policy.url}" target="_blank" rel="noopener noreferrer">🔗 공식 사이트 연결</a>` : '';
+    cardsHtml += `
+      <div class="chat-card-item">
+        <div style="display:flex; justify-space-between; align-items:center;">
+          <span class="t">${escapeHtml(policy.title)}</span>
+          <span style="font-size:11px; font-weight:700;">${badge}</span>
+        </div>
+        <div class="b">혜택: ${escapeHtml(policy.benefit)}</div>
+        <div class="d">${escapeHtml(policy.description)}</div>
+        ${link}
+      </div>
+    `;
+  });
+
+  addBotMessage(cardsHtml);
+}
+
+</script>
+</body>
+</html>

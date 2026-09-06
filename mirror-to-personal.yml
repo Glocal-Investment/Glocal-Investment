@@ -1,0 +1,24 @@
+name: Mirror to personal repository
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to personal repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PERSONAL_REPO_TOKEN }}
+          repository: Jlim01/Glocal-Investment
+          branch: main
+          force: true

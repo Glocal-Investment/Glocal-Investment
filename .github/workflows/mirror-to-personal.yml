@@ -14,11 +14,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Push to personal repository
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.PERSONAL_REPO_TOKEN }}
-          repository: Jlim01/Glocal-Investment
-          branch: main
-          force: true
+        env:
+          PERSONAL_REPO_TOKEN: ${{ secrets.PERSONAL_REPO_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add personal "https://x-access-token:${PERSONAL_REPO_TOKEN}@github.com/Jlim01/Glocal-Investment.git"
+          git push --force personal HEAD:main

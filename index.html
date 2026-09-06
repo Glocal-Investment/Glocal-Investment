@@ -617,7 +617,9 @@
 
         <div id="obStep2" style="display:none;width:100%;">
           <div class="step-label" data-i18n="obStep1">STEP 1 · 기본 정보</div>
-          <div class="field-label" style="margin-top:0;" data-i18n="obResidenceLabel">거주 지역</div>
+          <div class="field-label" style="margin-top:0;" data-i18n="obNameLabel">이름 (닉네임)</div>
+          <input type="text" class="amount-input" id="obName" maxlength="20" placeholder="예: 홍길동" />
+          <div class="field-label" data-i18n="obResidenceLabel">거주 지역</div>
           <select class="amount-input" id="obResidence">
             <option value="전주시">전주시</option>
             <option value="군산시">군산시</option>
@@ -729,7 +731,7 @@
       <div class="app-header">
         <div>
           <div class="app-kicker">지테크 G-Tech</div>
-          <div class="app-title" id="homeGreeting">안녕하세요, 나은님</div>
+          <div class="app-title" id="homeGreeting">안녕하세요, 회원님</div>
         </div>
         <button class="pill-btn" onclick="switchScreen('policy')" data-i18n="homeAllPolicyBtn">전체 혜택 보기</button>
       </div>
@@ -1028,9 +1030,9 @@
     <div class="page-head"><h2 data-i18n="profileHeadTitle">내 정보 설정</h2><p data-i18n="profileHeadSub">입력하신 프로필 정보를 바탕으로 맞춤 혜택을 찾아드립니다.</p></div>
     <div class="profile-layout">
       <div class="card profile-card">
-        <div class="avatar" id="avatarInitial">나</div>
+        <div class="avatar" id="avatarInitial">?</div>
         <div>
-          <div class="profile-name" id="profileName">김나은</div>
+          <div class="profile-name" id="profileName">회원</div>
           <div class="profile-sub" id="profileSub">27세 · 전주시 · 재직</div>
         </div>
       </div>
@@ -1062,6 +1064,8 @@
         <h3 style="margin:0;" data-i18n="pEditTitle">정보 수정</h3>
         <button onclick="document.getElementById('profileEditModal').classList.remove('show')" style="background:none; border:none; font-size:18px; cursor:pointer; color:var(--text-muted); font-weight:700;">✕</button>
       </div>
+      <div class="field-label" style="margin-top:0;">이름 (닉네임)</div>
+      <input type="text" class="amount-input" id="editName" maxlength="20" placeholder="예: 홍길동" />
       <div class="field-label">거주 지역</div>
       <select class="amount-input" id="editResidence">
         <option value="전주시">전주시</option>
@@ -1117,7 +1121,7 @@
 
       <!-- Personalized Recommendation Box -->
       <div id="compareRecommendBox" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border: 1.5px solid #93C5FD; padding: 18px; border-radius: var(--radius-lg); margin-bottom: 20px;">
-        <div style="font-size:12px; font-weight:800; color:#1E40AF; margin-bottom:4px;" data-i18n="compareRecTag">🎯 나은님 맞춤 추천 결론</div>
+        <div id="compareRecTag" style="font-size:12px; font-weight:800; color:#1E40AF; margin-bottom:4px;">🎯 맞춤 추천 결론</div>
         <div style="font-size:16px; font-weight:800; color:#1E3A8A; margin-bottom:6px;" id="recTitle">청년미래적금을 우선 추천합니다!</div>
         <div style="font-size:13px; color:#1E3A8A; line-height:1.55;" id="recReason">
           현재 월 소득 구간(200~300만 원)과 초기 자산 형성 단계를 고려할 때, 5년 장기 납입이 부담될 경우 <b>3년 만기의 청년미래적금</b>이 중도해지 위험 없이 안정적인 목돈을 만들기에 유리합니다.
@@ -1349,8 +1353,9 @@ function restartOnboarding(){
   if(introSub) introSub.style.display='block';
   localStorage.removeItem(LS_KEYS.onboarding);
   localStorage.removeItem(LS_KEYS.profile);
-  obProfile = { residence:'익산시', ageBand:'20s', employment:'employed', companyLocal:'익산시', incomeBand:'200to300', assetBand:'none', hasDebt:'no', nationality:'korean' };
+  obProfile = { name:'', residence:'익산시', ageBand:'20s', employment:'employed', companyLocal:'익산시', incomeBand:'200to300', assetBand:'none', hasDebt:'no', nationality:'korean' };
   selectedVisaType = 'UNKNOWN';
+  document.getElementById('obName').value = '';
   
   // 리셋 뷰
   document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
@@ -1358,20 +1363,21 @@ function restartOnboarding(){
   switchScreen('onboard');
 }
 
+function getDisplayName(){
+  if(obProfile.name) return obProfile.name;
+  const fallback = { ko: '회원', en: 'Member', zh: '会员' };
+  return fallback[currentLang] || fallback['ko'];
+}
+
 function applyProfileUI(){
   const isForeign = obProfile.nationality === 'foreigner';
-  const nameMap = {
-    ko: isForeign ? 'Mina' : '김나은',
-    en: isForeign ? 'Mina' : 'Naeun Kim',
-    zh: isForeign ? 'Mina' : '金娜恩'
-  };
-  const userName = nameMap[currentLang] || nameMap['ko'];
+  const userName = getDisplayName();
   const greetPrefix = { ko: '안녕하세요, ', en: 'Welcome, ', zh: '您好，' };
   const greetSuffix = { ko: '님', en: '', zh: '' };
   document.getElementById('homeGreeting').textContent = `${greetPrefix[currentLang]||greetPrefix['ko']}${userName}${greetSuffix[currentLang]||greetSuffix['ko']}`;
   document.getElementById('profileName').textContent = userName;
   document.getElementById('profileSub').textContent = `${getAgeBandLabel(obProfile.ageBand)} · ${getCityLabel(obProfile.residence)} · ${getEmploymentLabel(obProfile.employment)}`;
-  document.getElementById('avatarInitial').textContent = isForeign ? 'M' : (currentLang === 'en' ? 'N' : '나');
+  document.getElementById('avatarInitial').textContent = userName.trim().charAt(0).toUpperCase() || '?';
   document.getElementById('foreignFinanceBox').style.display = isForeign ? 'block' : 'none';
   renderProfileConditions();
 }
@@ -1433,6 +1439,7 @@ function closeSheetBg(e){ if(e.target.id==='sheetOverlay') closeSheet(); }
 function closeSheetBgId(e,id){ if(e.target.id===id) document.getElementById(id).classList.remove('show'); }
 
 function openProfileEditModal(){
+  document.getElementById('editName').value = obProfile.name || '';
   document.getElementById('editResidence').value = obProfile.residence;
   const setPicker = (containerId, val) => {
     document.querySelectorAll(`#${containerId} .cat-chip`).forEach(chip => {
@@ -1446,6 +1453,7 @@ function openProfileEditModal(){
 }
 
 function saveProfileEdit(){
+  obProfile.name = document.getElementById('editName').value.trim();
   obProfile.residence = document.getElementById('editResidence').value;
   const getSelected = (containerId) => {
     const sel = document.querySelector(`#${containerId} .cat-chip.selected`);
@@ -1482,7 +1490,7 @@ const DEFAULT_EXPENSES = [
 const ASSET_BASE = 1960000;
 let selectedVisaType = 'UNKNOWN';
 let selectedExpenseCat = '식비';
-let obProfile = { residence:'익산시', ageBand:'20s', employment:'employed', companyLocal:'익산시', incomeBand:'200to300', assetBand:'none', hasDebt:'no', nationality:'korean' };
+let obProfile = { name:'', residence:'익산시', ageBand:'20s', employment:'employed', companyLocal:'익산시', incomeBand:'200to300', assetBand:'none', hasDebt:'no', nationality:'korean' };
 
 const CITY_LABELS = {
   '전주시': { ko: '전주시', en: 'Jeonju-si', zh: '全州市' },
@@ -2001,6 +2009,7 @@ wireChipGroup('editAgeBand', v => {});
 wireChipGroup('editEmployment', v => {});
 wireChipGroup('editIncomeBand', v => {});
 
+document.getElementById('obName').addEventListener('input', e => { obProfile.name = e.target.value.trim(); });
 document.getElementById('obResidence').addEventListener('change', e => { obProfile.residence = e.target.value; });
 document.getElementById('policyResidenceSelect').addEventListener('change', e => {
   obProfile.residence = e.target.value;
@@ -2019,6 +2028,7 @@ function init(){
       const profile = JSON.parse(localStorage.getItem(LS_KEYS.profile));
       if(profile){
         obProfile = {
+          name: profile.name || '',
           residence: profile.residence || '전주시',
           ageBand: profile.ageBand || '20s',
           employment: profile.employment || 'employed',
@@ -2134,6 +2144,8 @@ function openSavingCompareModal() {
   const recTitle = document.getElementById('recTitle');
   const recReason = document.getElementById('recReason');
 
+  document.getElementById('compareRecTag').textContent = `🎯 ${getDisplayName()}님 맞춤 추천 결론`;
+
   // Recommendation engine based on user persona
   if (user.income <= 2500000 || user.asset <= 10000000) {
     recTitle.textContent = "💡 '청년미래적금'을 우선 추천합니다!";
@@ -2240,7 +2252,7 @@ const i18n = {
     consentTitle: "🔒 개인정보 수집·이용 동의", consentSub: "지테크(G-Tech)는 맞춤 혜택 매칭을 위해 아래 정보를 입력받습니다. 입력하신 정보는 서버로 전송되지 않고 이용 중인 브라우저에만 안전하게 저장됩니다.",
     consentItem1: "수집 항목: 거주 지역, 연령대, 근로 상태, 소득·자산 구간, 국적·체류자격", consentItem2: "이용 목적: 맞춤형 정책·금융 상품 매칭 및 안내", consentItem3: "보관 방법: 브라우저 로컬 저장소에만 저장, 언제든 직접 삭제 가능",
     consentLink: "개인정보처리방침 전문 보기 →", consentDecline: "아니오", consentAgree: "예, 동의합니다",
-    obStep1: "STEP 1 · 기본 정보", obResidenceLabel: "거주 지역", obAgeBandLabel: "연령대", obEmploymentLabel: "근로 상태", obCompanyLocalLabel: "근무 회사 위치 (전북 내 시·군)",
+    obStep1: "STEP 1 · 기본 정보", obNameLabel: "이름 (닉네임)", obResidenceLabel: "거주 지역", obAgeBandLabel: "연령대", obEmploymentLabel: "근로 상태", obCompanyLocalLabel: "근무 회사 위치 (전북 내 시·군)",
     obStep2: "STEP 2 · 재무 상태", obIncomeBandLabel: "월 평균 소득", obAssetBandLabel: "보유 자산 규모 (예적금 등)", obDebtLabel: "현재 상환 중인 대출·부채 (학자금 등)",
     obStep3: "STEP 3 · 국적 및 기타", obNationalityLabel: "국적", obVisaLabel: "체류자격 (비자)",
     obNextBtn: "다음으로", obResultBtn: "내 맞춤 결과 확인하기", obResultTitle: "진단이 완료되었습니다", obHomeBtn: "지테크 홈으로 이동",
@@ -2288,7 +2300,7 @@ const i18n = {
     consentTitle: "🔒 Consent to Collect & Use Personal Information", consentSub: "G-Tech collects the information below to match you with tailored benefits. Your data is never sent to a server — it stays safely in your browser.",
     consentItem1: "Collected: residence, age band, employment status, income/asset band, nationality & visa status", consentItem2: "Purpose: matching tailored policy and financial products", consentItem3: "Storage: browser local storage only, deletable anytime",
     consentLink: "Read full privacy policy →", consentDecline: "No", consentAgree: "Yes, I agree",
-    obStep1: "STEP 1 · Basic Info", obResidenceLabel: "Residence Region", obAgeBandLabel: "Age Band", obEmploymentLabel: "Employment Status", obCompanyLocalLabel: "Company Location (Jeonbuk)",
+    obStep1: "STEP 1 · Basic Info", obNameLabel: "Name (Nickname)", obResidenceLabel: "Residence Region", obAgeBandLabel: "Age Band", obEmploymentLabel: "Employment Status", obCompanyLocalLabel: "Company Location (Jeonbuk)",
     obStep2: "STEP 2 · Financial Info", obIncomeBandLabel: "Monthly Income", obAssetBandLabel: "Total Asset Scale", obDebtLabel: "Current Loans/Debts",
     obStep3: "STEP 3 · Nationality", obNationalityLabel: "Nationality", obVisaLabel: "Visa Type (Status)",
     obNextBtn: "Next Step", obResultBtn: "View Matched Results", obResultTitle: "Assessment Completed", obHomeBtn: "Go to G-Tech Home",
@@ -2336,7 +2348,7 @@ const i18n = {
     consentTitle: "🔒 个人信息收集·利用同意", consentSub: "G-Tech 为匹配专属福利需收集以下信息。您输入的信息不会发送至服务器，只安全保存在您使用的浏览器中。",
     consentItem1: "收集项目：居住地区、年龄段、就业状态、收入·资产区间、国籍及签证状态", consentItem2: "使用目的：匹配专属政策及金融产品", consentItem3: "保存方式：仅保存于浏览器本地存储，可随时自行删除",
     consentLink: "查看个人信息处理方针全文 →", consentDecline: "否", consentAgree: "是，我同意",
-    obStep1: "STEP 1 · 基本信息", obResidenceLabel: "居住地区", obAgeBandLabel: "年龄段", obEmploymentLabel: "就业状态", obCompanyLocalLabel: "工作单位位置 (全北)",
+    obStep1: "STEP 1 · 基本信息", obNameLabel: "姓名 (昵称)", obResidenceLabel: "居住地区", obAgeBandLabel: "年龄段", obEmploymentLabel: "就业状态", obCompanyLocalLabel: "工作单位位置 (全北)",
     obStep2: "STEP 2 · 财务状况", obIncomeBandLabel: "月平均收入", obAssetBandLabel: "资产规模", obDebtLabel: "目前偿还中的贷款",
     obStep3: "STEP 3 · 国籍", obNationalityLabel: "国籍", obVisaLabel: "居留资格 (签证)",
     obNextBtn: "下一步", obResultBtn: "查看匹配结果", obResultTitle: "测评已完成", obHomeBtn: "前往 G-Tech 首页",
@@ -2438,8 +2450,8 @@ function toggleChatbot() {
 
 function initChatbotGreeting() {
   const user = getCurrentUser();
-  const userName = user.nationality === 'foreigner' ? 'Mina' : '나은';
-  
+  const userName = getDisplayName();
+
   const greeting = `안녕하세요, <b>${userName}님</b>! 👋<br/>지역기반 재테크 플랫폼 <b>지테크(G-Tech) AI 챗봇</b>입니다.<br/><br/>현재 <b>${user.residence}</b> 거주 및 <b>${EMPLOYMENT_LABEL[user.employment]}</b> 조건에 맞춰 숨겨진 지원금과 알짜 정책을 찾아드릴게요.<br/><br/>아래 추천 키워드를 클릭하거나 궁금한 점을 편하게 질문해 보세요!`;
   
   addBotMessage(greeting);
